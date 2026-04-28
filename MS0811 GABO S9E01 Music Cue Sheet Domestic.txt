@@ -1,0 +1,703 @@
+SESSION NAME:	MS0811 GABO S9E01 Music Cue Sheet Domestic
+SAMPLE RATE:	48000.000000
+BIT DEPTH:	24-bit
+SESSION START TIMECODE:	00:00:00:00
+TIMECODE FORMAT:	25 Frame
+# OF AUDIO TRACKS:	446
+# OF AUDIO CLIPS:	34922
+# OF AUDIO FILES:	7165
+
+
+T R A C K  L I S T I N G
+TRACK NAME:	MX a1 (Stereo)
+COMMENTS:	
+USER DELAY:	0 Samples
+STATE: 
+CHANNEL 	EVENT   	CLIP NAME                     	START TIME    	END TIME      	DURATION      	STATE
+1       	1       	GABO_S8_EP01_FOXTEL_HD_MASTER_CLEAN.new.02-07	   00:00:07:00	   00:00:12:23	   00:00:05:22	Unmuted
+1       	2       	PRI_POSITIVE TASKING_Whisk Away_Melany Thompson (APRA)_NoShaker.wav.new.02-14	   00:00:17:17	   00:00:31:04	   00:00:13:12	Unmuted
+1       	3       	Rising Tension Bake 02_Harp_Howe.wav.new.01-08	   00:01:42:15	   00:01:54:07	   00:00:11:17	Unmuted
+1       	4       	GABO_START_SUN_018_AA_noDRMFX.wav.new.01-28	   00:02:16:23	   00:02:32:19	   00:00:15:21	Unmuted
+1       	5       	GBBO 12_Sticky Parchment Paper v1.03 TIDEWAY_2mx.wav.new.04-06	   00:02:47:11	   00:02:53:02	   00:00:05:15	Unmuted
+1       	6       	GBBO 12_Sticky Parchment Paper v1.03 TIDEWAY_Brass Short.wav.new.01-10	   00:02:57:17	   00:03:01:06	   00:00:03:13	Unmuted
+1       	7       	Orchestral Winners and Losers 07_WWs_Howe.wav.new.01-11	   00:03:01:23	   00:03:17:24	   00:00:16:00	Unmuted
+1       	8       	Titles 00_MIX_Howe.wav.new.01-06	   00:03:40:05	   00:04:12:06	   00:00:32:01	Unmuted
+1       	9       	Energy of Baking 00_MIX_Howe.wav.new.01-24	   00:05:20:22	   00:06:23:13	   00:01:02:16	Unmuted
+1       	10      	Holding Bake ALT 02_LOW STRINGS_Howe.wav.new.01-10	   00:06:45:07	   00:06:56:22	   00:00:11:15	Unmuted
+1       	11      	GABO_Simon says be silly_108_DH_03 noDRM.wav.new.01-05	   00:07:00:04	   00:07:11:18	   00:00:11:14	Unmuted
+1       	12      	GBBO_Caramelised Pizz V2.00_2mx_TH.wav.new.01-06	   00:07:23:06	   00:07:32:21	   00:00:09:15	Unmuted
+1       	13      	GBBO_Caramelised Pizz v1.01_2mx_TH.wav.new.01-06	   00:07:36:01	   00:07:47:08	   00:00:11:07	Unmuted
+1       	14      	GABO4_QUIRKY_M&M's_602_CT_noDRMnBSS.wav.new.01-05	   00:08:10:20	   00:08:19:07	   00:00:08:11	Unmuted
+1       	15      	GABO_POS_JOURNEY_601_CT_10 noSTGnMARIMBA.wav.new.01-05	   00:09:14:15	   00:09:29:15	   00:00:15:00	Unmuted
+1       	16      	GBBO_Rising Bread v1.02_2mx_TH.wav.new.01-05	   00:09:42:17	   00:09:53:24	   00:00:11:07	Unmuted
+1       	17      	GBBO 11_The Happy Blender v1.04_2mx_TH.wav.new.01-08	   00:10:16:21	   00:10:30:14	   00:00:13:18	Unmuted
+1       	18      	Light Baking 00_MIX_Howe.wav.new.01-05	   00:10:32:14	   00:10:49:11	   00:00:16:22	Unmuted
+1       	19      	Happy Pizz 00_MIX_Howe.wav.new.01-17	   00:12:18:21	   00:12:47:04	   00:00:28:08	Unmuted
+1       	20      	GBBO_Pear Shaped v1.04_2mx_TH.wav.new.01-05	   00:13:03:02	   00:13:17:01	   00:00:13:24	Unmuted
+1       	21      	GBBO_Pear Shaped_v1.04_Strings Shorts_TH.wav.new.01-08	   00:13:19:01	   00:13:24:16	   00:00:05:14	Unmuted
+1       	22      	GBBO14_Baked Mushroom Starter v1.03_TIDEWAY_String Short.wav.new.01-11	   00:13:47:04	   00:13:54:07	   00:00:07:03	Unmuted
+1       	23      	GBBO14_Baked Mushroom Starter v1.03_TIDEWAY_Ww Short.wav.new.01-07	   00:13:58:24	   00:14:03:18	   00:00:04:18	Unmuted
+1       	24      	PRI_TASKING POSITIVE_Splendid Sorbet_Nick Brown_(APRA)_Strings.wav.new.02-05	   00:14:40:05	   00:14:57:23	   00:00:17:18	Unmuted
+1       	25      	PRI_TASKING POSITIVE_Splendid Sorbet_Nick Brown_(APRA)_Strings.wav.new.03-14	   00:14:58:06	   00:15:19:10	   00:00:21:04	Unmuted
+1       	26      	GBBO Flurry Bake EXTENDED v4.05_2mx_TH.wav.new.01-11	   00:15:23:00	   00:15:47:08	   00:00:24:08	Unmuted
+1       	27      	GABO_POSITIVE_MARVELOUS_019_AA_noSTR.wav.new.01-13	   00:16:15:18	   00:16:46:24	   00:00:31:06	Unmuted
+1       	28      	Wonder 00_MIX_Howe.wav.new.01-12	   00:17:00:01	   00:17:08:18	   00:00:08:17	Unmuted
+1       	29      	Ticking Tarts 00_MIX_Howe.wav.new.01-12	   00:17:17:02	   00:17:32:21	   00:00:15:19	Unmuted
+1       	30      	Something Pizz 00_MIX_Howe.wav.new.01-07	   00:17:36:02	   00:18:34:12	   00:00:58:10	Unmuted
+1       	31      	Piano Sparkle 00_MIX_Howe.wav.new.01-14	   00:18:48:01	   00:18:59:00	   00:00:10:24	Unmuted
+1       	32      	Pastry Countdown 08_Howe_Short Strings Lo.wav.new.01-05	   00:19:04:11	   00:19:14:22	   00:00:10:11	Unmuted
+1       	33      	GBBO 12_Comedy Batter v1.01 TIDEWAY_Strings Pizz.wav.new.01-02	   00:19:28:04	   00:19:43:14	   00:00:15:10	Unmuted
+1       	34      	GABO_POSITIVE_BRIGHT_009_AA_07 noSTR.wav.new.01-05	   00:20:40:13	   00:20:58:24	   00:00:18:11	Unmuted
+1       	35      	Piano Sparkle 00_MIX_Howe.wav.new.01-11	   00:21:10:11	   00:21:21:16	   00:00:11:05	Unmuted
+1       	36      	Light Touch 00_Howe_2mx.wav.new.01-08	   00:21:34:13	   00:21:48:05	   00:00:13:17	Unmuted
+1       	37      	Countryside Air 00_MIX_Howe.wav.new.01-04	   00:22:51:17	   00:23:05:22	   00:00:14:05	Unmuted
+1       	38      	GABO_PPM_HAPPY_Happy Halloumi_Jacquie Joy (APRA)_ONLY Pads.wav.new.02-04	   00:23:19:24	   00:23:22:07	   00:00:02:08	Unmuted
+1       	39      	GBBO_Caramelised Pizz v1.03 ALT_2mx_TH.wav.new.01-04	   00:23:39:16	   00:23:56:14	   00:00:16:23	Unmuted
+1       	40      	GBBO_Lightly Does It v1.01_2mx_TH.wav.new.01-09	   00:24:19:10	   00:24:49:17	   00:00:30:06	Unmuted
+1       	41      	Light Whisk_05_Strings_Howe.wav.new.01-04	   00:25:04:07	   00:25:12:01	   00:00:07:19	Unmuted
+1       	42      	Light Whisk_06_Long WW's_Howe.wav.new.01-11	   00:25:17:23	   00:25:28:19	   00:00:10:20	Unmuted
+1       	43      	Light Whisk_01_Piano_Howe.wav.new.01-06	   00:25:29:21	   00:25:33:06	   00:00:03:10	Unmuted
+1       	44      	GBBO Gentle Tension_2mx_Howe.wav.new.01-05	   00:26:05:05	   00:26:27:19	   00:00:22:14	Unmuted
+1       	45      	GBBO 11_Stiff Peaks v1.11_StringsLong_TH.wav.new.01-04	   00:26:51:16	   00:27:11:20	   00:00:20:04	Unmuted
+1       	46      	Sugar Jam 07_Howe_Sht Strings Hi.wav.new.01-04	   00:27:18:08	   00:27:21:17	   00:00:03:09	Unmuted
+1       	47      	GBBO 12_Icing Madness v1.01 TIDEWAY_2mx.wav.new.01-09	   00:27:50:23	   00:28:11:14	   00:00:20:15	Unmuted
+1       	48      	PRI_LIGHT REFLECTIVE TICKING_Pastry Golden Hour_Joel Agius (APRA)_FULL MIX.wav.new.02-04	   00:28:40:18	   00:28:54:20	   00:00:14:02	Unmuted
+1       	49      	GBBO14_The Dough Is Rising v1.05_TIDEWAY_2mx.wav.new.01-05	   00:30:11:19	   00:30:21:03	   00:00:09:09	Unmuted
+1       	50      	No Time 03_WWs_Howe.wav.new.01-04	   00:30:49:24	   00:31:14:01	   00:00:24:02	Unmuted
+1       	51      	GBBO_Caramelised Pizz V2.00_2mx_TH.wav.new.03-13	   00:31:52:03	   00:32:01:23	   00:00:09:20	Unmuted
+1       	52      	GABO_QUIRKY_STICKYBEAKS_604_CT_01 FULL.wav.new.01-08	   00:32:20:19	   00:32:28:05	   00:00:07:11	Unmuted
+1       	53      	GABO_QUIRKY_STICKYBEAKS_604_CT_01 FULL.wav.new.02-21	   00:32:36:10	   00:33:01:11	   00:00:25:00	Unmuted
+1       	54      	Dragon Strings 02_STRINGS_Howe.wav.new.01-05	   00:33:09:18	   00:33:32:24	   00:00:23:06	Unmuted
+1       	55      	Wonder 00_MIX_Howe.wav.new.01-10	   00:34:11:09	   00:34:34:23	   00:00:23:14	Unmuted
+1       	56      	GBBO 12_Butter Cream Frosting v1.02 TIDEWAY_2mx.wav.new.01-15	   00:34:45:20	   00:35:00:05	   00:00:14:10	Unmuted
+1       	57      	Ticking Tarts 00_MIX_Howe.wav.new.01-09	   00:35:06:06	   00:35:21:20	   00:00:15:14	Unmuted
+1       	58      	GBBO13_Light Major Tension v1.02 TIDEWAY 2mx.wav.new.01-04	   00:35:55:18	   00:36:07:00	   00:00:11:07	Unmuted
+1       	59      	GBBO 12_Petit Fours v1.05 TIDEWAY_2mx.wav.new.01-20	   00:36:14:21	   00:36:28:03	   00:00:13:07	Unmuted
+1       	60      	Organic Orchestral 00_MIX_Howe.wav.new.01-05	   00:37:28:10	   00:37:40:06	   00:00:11:21	Unmuted
+1       	61      	GBBO_Caramelised Pizz v2.00_Mallets_TH.wav.new.01-08	   00:37:58:10	   00:38:12:14	   00:00:14:04	Unmuted
+1       	62      	Energy of Baking 00_MIX_Howe.wav.new.01-25	   00:38:32:12	   00:39:33:01	   00:01:00:14	Unmuted
+1       	63      	More Dragons 00_MIX_Howe.wav.new.01-04	   00:40:20:07	   00:40:51:10	   00:00:31:03	Unmuted
+1       	64      	GBBO 11_Bun In The Oven v1.03_2mx_TH.wav.new.01-05	   00:41:08:17	   00:41:26:20	   00:00:18:03	Unmuted
+1       	65      	GBBO 11_Bun In The Oven v1.03_2mx_TH.wav.new.02-05	   00:41:32:06	   00:41:49:02	   00:00:16:21	Unmuted
+1       	66      	GABO4_QUIRKY_RUSH HOUR_603_CT_FULL.wav.new.01-17	   00:42:19:19	   00:42:41:24	   00:00:22:04	Unmuted
+1       	67      	GBBO14_Baked Mushroom Starter v1.03_TIDEWAY 2mx_FULL MIX.wav.new.01-05	   00:43:40:03	   00:44:25:04	   00:00:45:01	Unmuted
+1       	68      	GBBO_Over Baked v1.01_2mx_TH.wav.new.01-04	   00:44:41:10	   00:45:09:20	   00:00:28:09	Unmuted
+1       	69      	GBBO_Cinnamon Twist v1.02_2mx_TH.wav.new.01-16	   00:45:24:24	   00:45:57:14	   00:00:32:15	Unmuted
+1       	70      	Dragon Strings 00_MIX_Howe.wav.new.01-04	   00:46:24:15	   00:46:52:09	   00:00:27:19	Unmuted
+1       	71      	GBBO 11_Melting Meringues v1.02_2mx_TH.wav.new.01-10	   00:48:04:05	   00:48:42:00	   00:00:37:20	Unmuted
+1       	72      	GBBO 12_Petit Fours v1.05 TIDEWAY_Perc Mallets.wav.new.01-13	   00:50:00:14	   00:50:05:09	   00:00:04:19	Unmuted
+1       	73      	Egg Timer Bake 00_MIX_Howe.wav.new.01-09	   00:50:12:07	   00:51:15:12	   00:01:03:05	Unmuted
+1       	74      	GBBO 11_GBBO_Soggy Bottoms Up v2.01_2mx_TH.wav.new.01-13	   00:51:24:12	   00:52:07:15	   00:00:43:03	Unmuted
+1       	75      	GABO_QUIRKY_STICKYBEAKS_604_CT_10 noPNOnSTGnMARIMBAnGTR.wav.new.01-05	   00:52:28:24	   00:52:53:24	   00:00:25:00	Unmuted
+1       	76      	GBBO 12_Sticky Parchment Paper v1.03 TIDEWAY_2mx.wav.new.01-09	   00:53:14:10	   00:53:35:08	   00:00:20:23	Unmuted
+1       	77      	GABO_ACTION_CHEFS_604_V2_CT_01 FULL.wav.new.01-05	   00:54:13:04	   00:54:25:17	   00:00:12:13	Unmuted
+1       	78      	GABO_ACTION_CHEFS_604_V2_CT_01 FULL.wav.new.02-12	   00:54:38:19	   00:55:05:19	   00:00:26:24	Unmuted
+1       	79      	GBBO 12_Neutral Croissant v1.01 TIDEWAY_2mx.wav.new.01-16	   00:56:24:22	   00:57:08:17	   00:00:43:20	Unmuted
+1       	80      	GABO_TENSION_Bake the Tension_107_DH_01 FULL.wav.new.01-04	   00:57:38:16	   00:57:59:14	   00:00:20:23	Unmuted
+1       	81      	GABO_TENSE_BURNT_609_CT_01 FULL.wav.new.01-04	   00:59:50:16	   01:00:09:24	   00:00:19:08	Unmuted
+1       	82      	GABO_POSITIVE_CANDLE_014_AA_07 noSTR.wav.new.01-04	   01:00:51:07	   01:01:29:00	   00:00:37:18	Unmuted
+1       	83      	GBBO 11_The Happy Blender v1.04_2mx_TH.wav.new.01-10	   01:02:17:24	   01:03:21:22	   00:01:03:23	Unmuted
+1       	84      	Win Some Lose Some 00_MIX_Howe.wav.new.01-04	   01:03:53:19	   01:04:03:18	   00:00:09:24	Unmuted
+1       	85      	Win Some Lose Some 00_MIX_Howe.wav.new.02-14	   01:04:22:03	   01:05:25:11	   00:01:03:08	Unmuted
+
+
+2       	1       	GABO_S8_EP01_FOXTEL_HD_MASTER_CLEAN.new.02-09	   00:00:07:00	   00:00:12:23	   00:00:05:22	Unmuted
+2       	2       	PRI_POSITIVE TASKING_Whisk Away_Melany Thompson (APRA)_NoShaker.wav.new.02-16	   00:00:17:17	   00:00:31:04	   00:00:13:12	Unmuted
+2       	3       	Rising Tension Bake 02_Harp_Howe.wav.new.01-10	   00:01:42:15	   00:01:54:07	   00:00:11:17	Unmuted
+2       	4       	GABO_START_SUN_018_AA_noDRMFX.wav.new.01-23	   00:02:16:23	   00:02:32:19	   00:00:15:21	Unmuted
+2       	5       	GBBO 12_Sticky Parchment Paper v1.03 TIDEWAY_2mx.wav.new.04-08	   00:02:47:11	   00:02:53:02	   00:00:05:15	Unmuted
+2       	6       	GBBO 12_Sticky Parchment Paper v1.03 TIDEWAY_Brass Short.wav.new.01-11	   00:02:57:17	   00:03:01:06	   00:00:03:13	Unmuted
+2       	7       	Orchestral Winners and Losers 07_WWs_Howe.wav.new.01-09	   00:03:01:23	   00:03:17:24	   00:00:16:00	Unmuted
+2       	8       	Titles 00_MIX_Howe.wav.new.01-07	   00:03:40:05	   00:04:12:06	   00:00:32:01	Unmuted
+2       	9       	Energy of Baking 00_MIX_Howe.wav.new.01-28	   00:05:20:22	   00:06:23:13	   00:01:02:16	Unmuted
+2       	10      	Holding Bake ALT 02_LOW STRINGS_Howe.wav.new.01-09	   00:06:45:07	   00:06:56:22	   00:00:11:15	Unmuted
+2       	11      	GABO_Simon says be silly_108_DH_03 noDRM.wav.new.01-04	   00:07:00:04	   00:07:11:18	   00:00:11:14	Unmuted
+2       	12      	GBBO_Caramelised Pizz V2.00_2mx_TH.wav.new.01-07	   00:07:23:06	   00:07:32:21	   00:00:09:15	Unmuted
+2       	13      	GBBO_Caramelised Pizz v1.01_2mx_TH.wav.new.01-07	   00:07:36:01	   00:07:47:08	   00:00:11:07	Unmuted
+2       	14      	GABO4_QUIRKY_M&M's_602_CT_noDRMnBSS.wav.new.01-04	   00:08:10:20	   00:08:19:07	   00:00:08:11	Unmuted
+2       	15      	GABO_POS_JOURNEY_601_CT_10 noSTGnMARIMBA.wav.new.01-04	   00:09:14:15	   00:09:29:15	   00:00:15:00	Unmuted
+2       	16      	GBBO_Rising Bread v1.02_2mx_TH.wav.new.01-04	   00:09:42:17	   00:09:53:24	   00:00:11:07	Unmuted
+2       	17      	GBBO 11_The Happy Blender v1.04_2mx_TH.wav.new.01-09	   00:10:16:21	   00:10:30:14	   00:00:13:18	Unmuted
+2       	18      	Light Baking 00_MIX_Howe.wav.new.01-04	   00:10:32:14	   00:10:49:11	   00:00:16:22	Unmuted
+2       	19      	Happy Pizz 00_MIX_Howe.wav.new.01-16	   00:12:18:21	   00:12:47:04	   00:00:28:08	Unmuted
+2       	20      	GBBO_Pear Shaped v1.04_2mx_TH.wav.new.01-04	   00:13:03:02	   00:13:17:01	   00:00:13:24	Unmuted
+2       	21      	GBBO_Pear Shaped_v1.04_Strings Shorts_TH.wav.new.01-07	   00:13:19:01	   00:13:24:16	   00:00:05:14	Unmuted
+2       	22      	GBBO14_Baked Mushroom Starter v1.03_TIDEWAY_String Short.wav.new.01-09	   00:13:47:04	   00:13:54:07	   00:00:07:03	Unmuted
+2       	23      	GBBO14_Baked Mushroom Starter v1.03_TIDEWAY_Ww Short.wav.new.01-09	   00:13:58:24	   00:14:03:18	   00:00:04:18	Unmuted
+2       	24      	PRI_TASKING POSITIVE_Splendid Sorbet_Nick Brown_(APRA)_Strings.wav.new.02-04	   00:14:40:05	   00:14:57:23	   00:00:17:18	Unmuted
+2       	25      	PRI_TASKING POSITIVE_Splendid Sorbet_Nick Brown_(APRA)_Strings.wav.new.03-15	   00:14:58:06	   00:15:19:10	   00:00:21:04	Unmuted
+2       	26      	GBBO Flurry Bake EXTENDED v4.05_2mx_TH.wav.new.01-12	   00:15:23:00	   00:15:47:08	   00:00:24:08	Unmuted
+2       	27      	GABO_POSITIVE_MARVELOUS_019_AA_noSTR.wav.new.01-12	   00:16:15:18	   00:16:46:24	   00:00:31:06	Unmuted
+2       	28      	Wonder 00_MIX_Howe.wav.new.01-13	   00:17:00:01	   00:17:08:18	   00:00:08:17	Unmuted
+2       	29      	Ticking Tarts 00_MIX_Howe.wav.new.01-13	   00:17:17:02	   00:17:32:21	   00:00:15:19	Unmuted
+2       	30      	Something Pizz 00_MIX_Howe.wav.new.01-06	   00:17:36:02	   00:18:34:12	   00:00:58:10	Unmuted
+2       	31      	Piano Sparkle 00_MIX_Howe.wav.new.01-16	   00:18:48:01	   00:18:59:00	   00:00:10:24	Unmuted
+2       	32      	Pastry Countdown 08_Howe_Short Strings Lo.wav.new.01-04	   00:19:04:11	   00:19:14:22	   00:00:10:11	Unmuted
+2       	33      	GBBO 12_Comedy Batter v1.01 TIDEWAY_2mx.wav.new.01-06	   00:19:28:04	   00:19:43:14	   00:00:15:10	Unmuted
+2       	34      	GABO_POSITIVE_BRIGHT_009_AA_07 noSTR.wav.new.01-04	   00:20:40:13	   00:20:58:24	   00:00:18:11	Unmuted
+2       	35      	Piano Sparkle 00_MIX_Howe.wav.new.01-09	   00:21:10:11	   00:21:21:16	   00:00:11:05	Unmuted
+2       	36      	Light Touch 00_Howe_2mx.wav.new.01-10	   00:21:34:13	   00:21:48:05	   00:00:13:17	Unmuted
+2       	37      	Countryside Air 00_MIX_Howe.wav.new.01-05	   00:22:51:17	   00:23:05:22	   00:00:14:05	Unmuted
+2       	38      	GABO_PPM_HAPPY_Happy Halloumi_Jacquie Joy (APRA)_ONLY Pads.wav.new.02-05	   00:23:19:24	   00:23:22:07	   00:00:02:08	Unmuted
+2       	39      	GBBO_Caramelised Pizz v1.03 ALT_2mx_TH.wav.new.01-05	   00:23:39:16	   00:23:56:14	   00:00:16:23	Unmuted
+2       	40      	GBBO_Lightly Does It v1.01_2mx_TH.wav.new.01-10	   00:24:19:10	   00:24:49:17	   00:00:30:06	Unmuted
+2       	41      	Light Whisk_05_Strings_Howe.wav.new.01-05	   00:25:04:07	   00:25:12:01	   00:00:07:19	Unmuted
+2       	42      	Light Whisk_06_Long WW's_Howe.wav.new.01-08	   00:25:17:23	   00:25:28:19	   00:00:10:20	Unmuted
+2       	43      	Light Whisk_01_Piano_Howe.wav.new.01-08	   00:25:29:21	   00:25:33:06	   00:00:03:10	Unmuted
+2       	44      	GBBO Gentle Tension_2mx_Howe.wav.new.01-04	   00:26:05:05	   00:26:27:19	   00:00:22:14	Unmuted
+2       	45      	GBBO 11_Stiff Peaks v1.11_StringsLong_TH.wav.new.01-05	   00:26:51:16	   00:27:11:20	   00:00:20:04	Unmuted
+2       	46      	Sugar Jam 07_Howe_Sht Strings Hi.wav.new.01-05	   00:27:18:08	   00:27:21:17	   00:00:03:09	Unmuted
+2       	47      	GBBO 12_Icing Madness v1.01 TIDEWAY_2mx.wav.new.01-11	   00:27:50:23	   00:28:11:14	   00:00:20:15	Unmuted
+2       	48      	PRI_LIGHT REFLECTIVE TICKING_Pastry Golden Hour_Joel Agius (APRA)_FULL MIX.wav.new.02-05	   00:28:40:18	   00:28:54:20	   00:00:14:02	Unmuted
+2       	49      	GBBO14_The Dough Is Rising v1.05_TIDEWAY_2mx.wav.new.01-04	   00:30:11:19	   00:30:21:03	   00:00:09:09	Unmuted
+2       	50      	No Time 03_WWs_Howe.wav.new.01-05	   00:30:49:24	   00:31:14:01	   00:00:24:02	Unmuted
+2       	51      	GBBO_Caramelised Pizz V2.00_2mx_TH.wav.new.03-16	   00:31:52:03	   00:32:01:23	   00:00:09:20	Unmuted
+2       	52      	GABO_QUIRKY_STICKYBEAKS_604_CT_01 FULL.wav.new.01-11	   00:32:20:19	   00:32:28:05	   00:00:07:11	Unmuted
+2       	53      	GABO_QUIRKY_STICKYBEAKS_604_CT_01 FULL.wav.new.02-22	   00:32:36:10	   00:33:01:11	   00:00:25:00	Unmuted
+2       	54      	Dragon Strings 02_STRINGS_Howe.wav.new.01-04	   00:33:09:18	   00:33:32:24	   00:00:23:06	Unmuted
+2       	55      	Wonder 00_MIX_Howe.wav.new.01-08	   00:34:11:09	   00:34:34:23	   00:00:23:14	Unmuted
+2       	56      	GBBO 12_Butter Cream Frosting v1.02 TIDEWAY_2mx.wav.new.01-16	   00:34:45:20	   00:35:00:05	   00:00:14:10	Unmuted
+2       	57      	Ticking Tarts 00_MIX_Howe.wav.new.01-11	   00:35:06:06	   00:35:21:20	   00:00:15:14	Unmuted
+2       	58      	GBBO13_Light Major Tension v1.02 TIDEWAY 2mx.wav.new.01-05	   00:35:55:18	   00:36:07:00	   00:00:11:07	Unmuted
+2       	59      	GBBO 12_Petit Fours v1.05 TIDEWAY_2mx.wav.new.01-21	   00:36:14:21	   00:36:28:03	   00:00:13:07	Unmuted
+2       	60      	Organic Orchestral 00_MIX_Howe.wav.new.01-04	   00:37:28:10	   00:37:40:06	   00:00:11:21	Unmuted
+2       	61      	GBBO_Caramelised Pizz v2.00_Mallets_TH.wav.new.01-10	   00:37:58:10	   00:38:12:14	   00:00:14:04	Unmuted
+2       	62      	Energy of Baking 00_MIX_Howe.wav.new.01-35	   00:38:32:12	   00:39:33:01	   00:01:00:14	Unmuted
+2       	63      	More Dragons 00_MIX_Howe.wav.new.01-05	   00:40:20:07	   00:40:51:10	   00:00:31:03	Unmuted
+2       	64      	GBBO 11_Bun In The Oven v1.03_2mx_TH.wav.new.01-04	   00:41:08:17	   00:41:26:20	   00:00:18:03	Unmuted
+2       	65      	GBBO 11_Bun In The Oven v1.03_2mx_TH.wav.new.02-04	   00:41:32:06	   00:41:49:02	   00:00:16:21	Unmuted
+2       	66      	GABO4_QUIRKY_RUSH HOUR_603_CT_FULL.wav.new.01-16	   00:42:19:19	   00:42:41:24	   00:00:22:04	Unmuted
+2       	67      	GBBO14_Baked Mushroom Starter v1.03_TIDEWAY 2mx_JUST STRINGS MIX.wav.new.01-07	   00:43:40:03	   00:44:25:04	   00:00:45:01	Unmuted
+2       	68      	GBBO_Over Baked v1.01_2mx_TH.wav.new.01-05	   00:44:41:10	   00:45:09:20	   00:00:28:09	Unmuted
+2       	69      	GBBO_Cinnamon Twist v1.02_2mx_TH.wav.new.01-17	   00:45:24:24	   00:45:57:14	   00:00:32:15	Unmuted
+2       	70      	Dragon Strings 00_MIX_Howe.wav.new.01-05	   00:46:24:15	   00:46:52:09	   00:00:27:19	Unmuted
+2       	71      	GBBO 11_Melting Meringues v1.02_2mx_TH.wav.new.01-09	   00:48:04:05	   00:48:42:00	   00:00:37:20	Unmuted
+2       	72      	GBBO 12_Petit Fours v1.05 TIDEWAY_Perc Mallets.wav.new.01-13	   00:50:00:14	   00:50:05:09	   00:00:04:19	Unmuted
+2       	73      	Egg Timer Bake 00_MIX_Howe.wav.new.01-11	   00:50:12:07	   00:51:15:12	   00:01:03:05	Unmuted
+2       	74      	GBBO 11_GBBO_Soggy Bottoms Up v2.01_2mx_TH.wav.new.01-14	   00:51:24:12	   00:52:07:15	   00:00:43:03	Unmuted
+2       	75      	GABO_QUIRKY_STICKYBEAKS_604_CT_10 noPNOnSTGnMARIMBAnGTR.wav.new.01-04	   00:52:28:24	   00:52:53:24	   00:00:25:00	Unmuted
+2       	76      	GBBO 12_Sticky Parchment Paper v1.03 TIDEWAY_2mx.wav.new.01-10	   00:53:14:10	   00:53:35:08	   00:00:20:23	Unmuted
+2       	77      	GABO_ACTION_CHEFS_604_V2_CT_01 FULL.wav.new.01-04	   00:54:13:04	   00:54:25:17	   00:00:12:13	Unmuted
+2       	78      	GABO_ACTION_CHEFS_604_V2_CT_01 FULL.wav.new.02-13	   00:54:38:19	   00:55:05:19	   00:00:26:24	Unmuted
+2       	79      	GBBO 12_Neutral Croissant v1.01 TIDEWAY_2mx.wav.new.01-15	   00:56:24:22	   00:57:08:17	   00:00:43:20	Unmuted
+2       	80      	GABO_TENSION_Bake the Tension_107_DH_01 FULL.wav.new.01-05	   00:57:38:16	   00:57:59:14	   00:00:20:23	Unmuted
+2       	81      	GABO_TENSE_BURNT_609_CT_01 FULL.wav.new.01-05	   00:59:50:16	   01:00:09:24	   00:00:19:08	Unmuted
+2       	82      	GABO_POSITIVE_CANDLE_014_AA_07 noSTR.wav.new.01-05	   01:00:51:07	   01:01:29:00	   00:00:37:18	Unmuted
+2       	83      	GBBO 11_The Happy Blender v1.04_2mx_TH.wav.new.01-11	   01:02:17:24	   01:03:21:22	   00:01:03:23	Unmuted
+2       	84      	Win Some Lose Some 00_MIX_Howe.wav.new.01-05	   01:03:53:19	   01:04:03:18	   00:00:09:24	Unmuted
+2       	85      	Win Some Lose Some 00_MIX_Howe.wav.new.02-17	   01:04:22:03	   01:05:25:11	   00:01:03:08	Unmuted
+
+
+TRACK NAME:	MX a2 (Stereo)
+COMMENTS:	
+USER DELAY:	0 Samples
+STATE: 
+CHANNEL 	EVENT   	CLIP NAME                     	START TIME    	END TIME      	DURATION      	STATE
+1       	1       	PRI_POSITIVE TASKING_Whisk Away_Melany Thompson (APRA)_NoShaker.wav.new.02-18	   00:00:14:05	   00:00:18:05	   00:00:03:24	Unmuted
+1       	2       	FTX-heart-of-the-fight-full.new.02-28	   00:00:50:10	   00:01:11:16	   00:00:21:06	Unmuted
+1       	3       	FTX-heart-of-the-fight-full.new.03-15	   00:01:22:08	   00:01:36:17	   00:00:14:08	Unmuted
+1       	4       	Rising Tension Bake 04_Mallets_Howe.wav.new.02-11	   00:01:42:15	   00:01:54:16	   00:00:12:01	Unmuted
+1       	5       	GABO_START_MAGIC_942_DH_FULL.wav.new.01-16	   00:02:10:21	   00:02:32:19	   00:00:21:22	Unmuted
+1       	6       	GBBO 12_Sticky Parchment Paper v1.03 TIDEWAY_2mx.wav.new.05-16	   00:02:52:06	   00:02:59:10	   00:00:07:03	Unmuted
+1       	7       	Orchestral Winners and Losers 06_PIANO & SYNTH_Howe.wav.new.01-11	   00:03:01:24	   00:03:17:24	   00:00:16:00	Unmuted
+1       	8       	GABO4_QUIRKY_M&M's_602_CT_noPNO.wav.new.01-05	   00:08:07:03	   00:08:13:06	   00:00:06:03	Unmuted
+1       	9       	GBBO 12_Tutti Fruitti v1.02 TIDEWAY_2mx.wav.new.01-11	   00:08:19:09	   00:08:36:02	   00:00:16:18	Unmuted
+1       	10      	GBBO_Cinnamon Twist v1.02_2mx_TH.wav.new.01-12	   00:08:54:21	   00:09:07:09	   00:00:12:13	Unmuted
+1       	11      	GBBO_Pear Shaped_v1.04_Lo Orch Perc_TH.wav.new.01-11	   00:13:17:20	   00:13:27:11	   00:00:09:15	Unmuted
+1       	12      	GBBO14_Baked Mushroom Starter v1.03_TIDEWAY_String Pizz Low.wav.new.01-10	   00:13:47:02	   00:13:54:07	   00:00:07:05	Unmuted
+1       	13      	GBBO14_Baked Mushroom Starter v1.03_TIDEWAY_Ww Long.wav.new.01-05	   00:13:58:13	   00:14:05:05	   00:00:06:17	Unmuted
+1       	14      	PRI_TASKING POSITIVE_Splendid Sorbet_Nick Brown_(APRA)_Full.wav.new.02-05	   00:15:17:01	   00:15:19:23	   00:00:02:22	Unmuted
+1       	15      	GBBO Flurry Bake EXTENDED v4.05_Mallets_TH.wav.new.01-06	   00:15:46:17	   00:15:49:13	   00:00:02:21	Unmuted
+1       	16      	Wonder 04_STRINGS_Howe.wav.new.01-12	   00:17:07:03	   00:17:10:17	   00:00:03:14	Unmuted
+1       	17      	Something Pizz 01_HIGH_STRINGS_Howe.wav.new.01-07	   00:18:20:11	   00:18:33:07	   00:00:12:21	Unmuted
+1       	18      	GABO4_QUIRKY_RUSH HOUR_603_CT_FULL.wav.new.01-14	   00:19:48:08	   00:20:00:05	   00:00:11:22	Unmuted
+1       	19      	GABO4_QUIRKY_RUSH HOUR_603_CT_FULL.wav.new.02-12	   00:20:06:02	   00:20:18:05	   00:00:12:02	Unmuted
+1       	20      	Piano Sparkle 05_PERC_Howe.wav.new.01-05	   00:21:09:24	   00:21:12:00	   00:00:02:01	Unmuted
+1       	21      	Piano Sparkle 01_PIANO_Howe.wav.new.01-15	   00:21:21:12	   00:21:34:13	   00:00:13:00	Unmuted
+1       	22      	Light Touch 06_Howe_Perc.wav.new.01-06	   00:21:47:00	   00:21:54:20	   00:00:07:20	Unmuted
+1       	23      	Countryside Air 01_HIGH_STRINGS_Howe.wav.new.01-19	   00:23:05:15	   00:23:19:15	   00:00:14:00	Unmuted
+1       	24      	GABO_PPM_HAPPY_Happy Halloumi_Jacquie Joy (APRA)_Full Mix.wav.new.02-11	   00:23:21:09	   00:23:32:21	   00:00:11:12	Unmuted
+1       	25      	GBBO_Caramelised Pizz v1.03 ALT_Hi Strings.wav.new.02-05	   00:23:54:00	   00:23:56:15	   00:00:02:15	Unmuted
+1       	26      	GBBO_Lightly Does It v1.01_Lo Strings Pizz_TH.wav.new.01-05	   00:24:49:10	   00:24:59:21	   00:00:10:11	Unmuted
+1       	27      	Light Whisk_03_Harp_Howe.wav.new.01-05	   00:25:11:07	   00:25:15:20	   00:00:04:13	Unmuted
+1       	28      	Light Whisk_07_Short WW's_Howe.wav.new.01-05	   00:25:18:01	   00:25:28:19	   00:00:10:17	Unmuted
+1       	29      	Light Whisk_05_Strings_Howe.wav.new.02-09	   00:25:29:21	   00:25:33:10	   00:00:03:14	Unmuted
+1       	30      	GBBO Gentle Tension_Long Winds_Howe.wav.new.01-11	   00:26:24:04	   00:26:35:15	   00:00:11:11	Unmuted
+1       	31      	GBBO 11_Stiff Peaks v1.11_Harpsichord_TH.wav.new.01-05	   00:27:00:14	   00:27:11:20	   00:00:11:05	Unmuted
+1       	32      	Sugar Jam 04_Howe_Marimba.wav.new.01-05	   00:27:17:16	   00:27:21:12	   00:00:03:21	Unmuted
+1       	33      	GBBO 12_Icing Madness v1.01 TIDEWAY_Winds Perc Hi.wav.new.01-04	   00:27:43:10	   00:27:51:04	   00:00:07:19	Unmuted
+1       	34      	GBBO Rhythmic Tension_Harp_Howe.wav.new.01-05	   00:28:37:22	   00:28:39:12	   00:00:01:14	Unmuted
+1       	35      	GBBO Icing Tension_Short Strings_Howe.wav.new.01-04	   00:28:56:00	   00:29:25:04	   00:00:29:04	Unmuted
+1       	36      	GBBO14_The Dough Is Rising v1.05_TIDEWAY_STRINGS LONG 1.wav.new.01-08	   00:30:20:08	   00:30:31:00	   00:00:10:16	Unmuted
+1       	37      	GABO4_START_SPRING_601_CT_noSTGS.wav.new.01-14	   00:31:12:21	   00:31:43:24	   00:00:31:03	Unmuted
+1       	38      	GBBO_Caramelised Pizz v1.01_Orch Perc_TH.wav.new.01-04	   00:32:01:16	   00:32:06:10	   00:00:04:19	Unmuted
+1       	39      	GABO_QUIRKY_STICKYBEAKS_604_CT_08 noPNOnSTG.wav.new.01-09	   00:32:28:02	   00:32:36:12	   00:00:08:09	Unmuted
+1       	40      	Neutral Bed 00_MIX_Howe.wav.new.01-04	   00:33:28:08	   00:34:12:05	   00:00:43:21	Unmuted
+1       	41      	Lemon Curd_01_Mallets_Howe.wav.new.01-04	   00:35:30:07	   00:35:56:07	   00:00:26:00	Unmuted
+1       	42      	GBBO 12_Petit Fours v1.05 TIDEWAY_2mx.wav.new.02-37	   00:36:28:00	   00:36:33:02	   00:00:05:02	Unmuted
+1       	43      	Emotive Bake 00_MIX_Howe.wav.new.01-11	   00:36:53:06	   00:37:10:11	   00:00:17:05	Unmuted
+1       	44      	Organic Orchestral 05_PIANO_Howe.wav.new.01-05	   00:37:39:10	   00:37:50:11	   00:00:11:01	Unmuted
+1       	45      	GBBO_Pepper Pizz v1.02_2mx_TH.wav.new.01-06	   00:39:46:24	   00:40:04:23	   00:00:17:24	Unmuted
+1       	46      	GBBO 11_Bun In The Oven v1.03_Mallets_TH.wav.new.01-05	   00:41:26:13	   00:41:33:17	   00:00:07:04	Unmuted
+1       	47      	Dragon Strings 03_MALLETS_Howe.wav.new.01-06	   00:46:51:18	   00:46:58:24	   00:00:07:05	Unmuted
+1       	48      	GBBO 12_Petit Fours v1.05 TIDEWAY_2mx.wav.new.01-19	   00:49:01:07	   00:50:01:15	   00:01:00:08	Unmuted
+1       	49      	Emotive Bake 00_MIX_Howe.wav.new.01-10	   00:51:08:04	   00:51:25:13	   00:00:17:09	Unmuted
+1       	50      	GBBO 12_Sticky Parchment Paper v1.03 TIDEWAY_2mx.wav.new.02-16	   00:53:34:16	   00:53:48:09	   00:00:13:18	Unmuted
+1       	51      	GABO_ACTION_CHEFS_604_V2_CT_03 noDRMnBASS.wav.new.01-10	   00:54:24:23	   00:54:39:07	   00:00:14:08	Unmuted
+1       	52      	GABO_ACTION_CHEFS_604_V2_CT_03 noDRMnBASS.wav.new.01-13	   00:55:04:11	   00:55:33:06	   00:00:28:19	Unmuted
+1       	53      	GBBO Icing Tension_2mx_Howe.wav.new.01-05	   00:55:45:01	   00:56:13:18	   00:00:28:17	Unmuted
+1       	54      	GABO_TENSION_Bake the Tension_107_DH_03 noSTRnoLEAD.wav.new.01-05	   00:57:59:00	   00:58:03:21	   00:00:04:21	Unmuted
+1       	55      	Bakewell Counting 03_VIBRAPHONE_Howe.wav.new.02-05	   00:58:11:23	   00:58:17:12	   00:00:05:14	Unmuted
+1       	56      	GABO_TENSE_KITCHEN_DRAMA_308_DR_11 noSTRNGS.wav.new.01-21	   00:58:17:17	   00:59:14:21	   00:00:57:04	Unmuted
+1       	57      	Ticking Cells v2 02_Mallets_Howe.wav.new.01-09	   00:59:50:16	   00:59:52:23	   00:00:02:07	Unmuted
+1       	58      	Ticking Cells v2 02_Mallets_Howe.wav.new.01-10	   00:59:55:20	   00:59:58:02	   00:00:02:07	Unmuted
+1       	59      	Ticking Cells v2 02_Mallets_Howe.wav.new.02-04	   01:00:00:21	   01:00:09:18	   00:00:08:22	Unmuted
+1       	60      	Win Some Lose Some 03_STRINGS_Howe.wav.new.01-05	   01:04:00:10	   01:04:09:01	   00:00:08:15	Unmuted
+
+
+2       	1       	PRI_POSITIVE TASKING_Whisk Away_Melany Thompson (APRA)_NoShaker.wav.new.02-19	   00:00:14:05	   00:00:18:05	   00:00:03:24	Unmuted
+2       	2       	FTX-heart-of-the-fight-full.new.02-29	   00:00:50:10	   00:01:11:16	   00:00:21:06	Unmuted
+2       	3       	FTX-heart-of-the-fight-full.new.03-16	   00:01:22:08	   00:01:36:17	   00:00:14:08	Unmuted
+2       	4       	Rising Tension Bake 04_Mallets_Howe.wav.new.02-08	   00:01:42:15	   00:01:54:16	   00:00:12:01	Unmuted
+2       	5       	GABO_START_MAGIC_942_DH_FULL.wav.new.01-17	   00:02:10:21	   00:02:32:19	   00:00:21:22	Unmuted
+2       	6       	GBBO 12_Sticky Parchment Paper v1.03 TIDEWAY_2mx.wav.new.05-14	   00:02:52:06	   00:02:59:10	   00:00:07:03	Unmuted
+2       	7       	Orchestral Winners and Losers 06_PIANO & SYNTH_Howe.wav.new.01-09	   00:03:01:24	   00:03:17:24	   00:00:16:00	Unmuted
+2       	8       	GABO4_QUIRKY_M&M's_602_CT_noPNO.wav.new.01-04	   00:08:07:03	   00:08:13:06	   00:00:06:03	Unmuted
+2       	9       	GBBO 12_Tutti Fruitti v1.02 TIDEWAY_2mx.wav.new.01-09	   00:08:19:09	   00:08:36:02	   00:00:16:18	Unmuted
+2       	10      	GBBO_Cinnamon Twist v1.02_2mx_TH.wav.new.01-15	   00:08:54:21	   00:09:07:09	   00:00:12:13	Unmuted
+2       	11      	GBBO_Pear Shaped_v1.04_Lo Orch Perc_TH.wav.new.01-10	   00:13:17:20	   00:13:27:11	   00:00:09:15	Unmuted
+2       	12      	GBBO14_Baked Mushroom Starter v1.03_TIDEWAY_String Pizz Low.wav.new.01-09	   00:13:47:02	   00:13:54:07	   00:00:07:05	Unmuted
+2       	13      	GBBO14_Baked Mushroom Starter v1.03_TIDEWAY_Ww Long.wav.new.01-04	   00:13:58:13	   00:14:05:05	   00:00:06:17	Unmuted
+2       	14      	PRI_TASKING POSITIVE_Splendid Sorbet_Nick Brown_(APRA)_Full.wav.new.02-04	   00:15:17:01	   00:15:19:23	   00:00:02:22	Unmuted
+2       	15      	GBBO Flurry Bake EXTENDED v4.05_Mallets_TH.wav.new.01-07	   00:15:46:17	   00:15:49:13	   00:00:02:21	Unmuted
+2       	16      	Wonder 04_STRINGS_Howe.wav.new.01-13	   00:17:07:03	   00:17:10:17	   00:00:03:14	Unmuted
+2       	17      	Something Pizz 01_HIGH_STRINGS_Howe.wav.new.01-06	   00:18:20:11	   00:18:33:07	   00:00:12:21	Unmuted
+2       	18      	GABO4_QUIRKY_RUSH HOUR_603_CT_FULL.wav.new.01-12	   00:19:48:08	   00:20:00:05	   00:00:11:22	Unmuted
+2       	19      	GABO4_QUIRKY_RUSH HOUR_603_CT_FULL.wav.new.02-13	   00:20:06:02	   00:20:18:05	   00:00:12:02	Unmuted
+2       	20      	Piano Sparkle 05_PERC_Howe.wav.new.01-04	   00:21:09:24	   00:21:12:00	   00:00:02:01	Unmuted
+2       	21      	Piano Sparkle 01_PIANO_Howe.wav.new.01-14	   00:21:21:12	   00:21:34:13	   00:00:13:00	Unmuted
+2       	22      	Light Touch 06_Howe_Perc.wav.new.01-08	   00:21:47:00	   00:21:54:20	   00:00:07:20	Unmuted
+2       	23      	Countryside Air 01_HIGH_STRINGS_Howe.wav.new.01-21	   00:23:05:15	   00:23:19:15	   00:00:14:00	Unmuted
+2       	24      	GABO_PPM_HAPPY_Happy Halloumi_Jacquie Joy (APRA)_Full Mix.wav.new.02-08	   00:23:21:09	   00:23:32:21	   00:00:11:12	Unmuted
+2       	25      	GBBO_Caramelised Pizz v1.03 ALT_Hi Strings.wav.new.02-04	   00:23:54:00	   00:23:56:15	   00:00:02:15	Unmuted
+2       	26      	GBBO_Lightly Does It v1.01_Lo Strings Pizz_TH.wav.new.01-04	   00:24:49:10	   00:24:59:21	   00:00:10:11	Unmuted
+2       	27      	Light Whisk_03_Harp_Howe.wav.new.01-04	   00:25:11:07	   00:25:15:20	   00:00:04:13	Unmuted
+2       	28      	Light Whisk_07_Short WW's_Howe.wav.new.01-04	   00:25:18:01	   00:25:28:19	   00:00:10:17	Unmuted
+2       	29      	Light Whisk_05_Strings_Howe.wav.new.02-11	   00:25:29:21	   00:25:33:10	   00:00:03:14	Unmuted
+2       	30      	GBBO Gentle Tension_Long Winds_Howe.wav.new.01-09	   00:26:24:04	   00:26:35:15	   00:00:11:11	Unmuted
+2       	31      	GBBO 11_Stiff Peaks v1.11_Harpsichord_TH.wav.new.01-04	   00:27:00:14	   00:27:11:20	   00:00:11:05	Unmuted
+2       	32      	Sugar Jam 04_Howe_Marimba.wav.new.01-04	   00:27:17:16	   00:27:21:12	   00:00:03:21	Unmuted
+2       	33      	GBBO 12_Icing Madness v1.01 TIDEWAY_Winds Perc Hi.wav.new.01-05	   00:27:43:10	   00:27:51:04	   00:00:07:19	Unmuted
+2       	34      	GBBO Rhythmic Tension_Harp_Howe.wav.new.01-04	   00:28:37:22	   00:28:39:12	   00:00:01:14	Unmuted
+2       	35      	GBBO Icing Tension_Short Strings_Howe.wav.new.01-05	   00:28:56:00	   00:29:25:04	   00:00:29:04	Unmuted
+2       	36      	GBBO14_The Dough Is Rising v1.05_TIDEWAY_STRINGS LONG 1.wav.new.01-10	   00:30:20:08	   00:30:31:00	   00:00:10:16	Unmuted
+2       	37      	GABO4_START_SPRING_601_CT_noSTGS.wav.new.01-15	   00:31:12:21	   00:31:43:24	   00:00:31:03	Unmuted
+2       	38      	GBBO_Caramelised Pizz v1.01_Orch Perc_TH.wav.new.01-05	   00:32:01:16	   00:32:06:10	   00:00:04:19	Unmuted
+2       	39      	GABO_QUIRKY_STICKYBEAKS_604_CT_08 noPNOnSTG.wav.new.01-10	   00:32:28:02	   00:32:36:12	   00:00:08:09	Unmuted
+2       	40      	Neutral Bed 00_MIX_Howe.wav.new.01-05	   00:33:28:08	   00:34:12:05	   00:00:43:21	Unmuted
+2       	41      	Lemon Curd_01_Mallets_Howe.wav.new.01-05	   00:35:30:07	   00:35:56:07	   00:00:26:00	Unmuted
+2       	42      	GBBO 12_Petit Fours v1.05 TIDEWAY_2mx.wav.new.02-38	   00:36:28:00	   00:36:33:02	   00:00:05:02	Unmuted
+2       	43      	Emotive Bake 00_MIX_Howe.wav.new.01-09	   00:36:53:06	   00:37:10:11	   00:00:17:05	Unmuted
+2       	44      	Organic Orchestral 05_PIANO_Howe.wav.new.01-04	   00:37:39:10	   00:37:50:11	   00:00:11:01	Unmuted
+2       	45      	GBBO_Pepper Pizz v1.02_2mx_TH.wav.new.01-07	   00:39:46:24	   00:40:04:23	   00:00:17:24	Unmuted
+2       	46      	GBBO 11_Bun In The Oven v1.03_Mallets_TH.wav.new.01-04	   00:41:26:13	   00:41:33:17	   00:00:07:04	Unmuted
+2       	47      	Dragon Strings 03_MALLETS_Howe.wav.new.01-08	   00:46:51:18	   00:46:58:24	   00:00:07:05	Unmuted
+2       	48      	GBBO 12_Petit Fours v1.05 TIDEWAY_2mx.wav.new.01-17	   00:49:01:07	   00:50:01:15	   00:01:00:08	Unmuted
+2       	49      	Emotive Bake 00_MIX_Howe.wav.new.01-08	   00:51:08:04	   00:51:25:13	   00:00:17:09	Unmuted
+2       	50      	GBBO 12_Sticky Parchment Paper v1.03 TIDEWAY_2mx.wav.new.02-15	   00:53:34:16	   00:53:48:09	   00:00:13:18	Unmuted
+2       	51      	GABO_ACTION_CHEFS_604_V2_CT_03 noDRMnBASS.wav.new.01-09	   00:54:24:23	   00:54:39:07	   00:00:14:08	Unmuted
+2       	52      	GABO_ACTION_CHEFS_604_V2_CT_03 noDRMnBASS.wav.new.01-15	   00:55:04:11	   00:55:33:06	   00:00:28:19	Unmuted
+2       	53      	GBBO Icing Tension_2mx_Howe.wav.new.01-04	   00:55:45:01	   00:56:13:18	   00:00:28:17	Unmuted
+2       	54      	GABO_TENSION_Bake the Tension_107_DH_03 noSTRnoLEAD.wav.new.01-04	   00:57:59:00	   00:58:03:21	   00:00:04:21	Unmuted
+2       	55      	Bakewell Counting 03_VIBRAPHONE_Howe.wav.new.02-04	   00:58:11:23	   00:58:17:12	   00:00:05:14	Unmuted
+2       	56      	GABO_TENSE_KITCHEN_DRAMA_308_DR_11 noSTRNGS.wav.new.01-19	   00:58:17:17	   00:59:14:21	   00:00:57:04	Unmuted
+2       	57      	Ticking Cells v2 02_Mallets_Howe.wav.new.01-11	   00:59:50:16	   00:59:52:23	   00:00:02:07	Unmuted
+2       	58      	Ticking Cells v2 02_Mallets_Howe.wav.new.01-08	   00:59:55:20	   00:59:58:02	   00:00:02:07	Unmuted
+2       	59      	Ticking Cells v2 02_Mallets_Howe.wav.new.02-05	   01:00:00:21	   01:00:09:18	   00:00:08:22	Unmuted
+2       	60      	Win Some Lose Some 03_STRINGS_Howe.wav.new.01-04	   01:04:00:10	   01:04:09:01	   00:00:08:15	Unmuted
+
+
+TRACK NAME:	MX a3 (Stereo)
+COMMENTS:	
+USER DELAY:	0 Samples
+STATE: 
+CHANNEL 	EVENT   	CLIP NAME                     	START TIME    	END TIME      	DURATION      	STATE
+1       	1       	Rising Tension Bake 04_Mallets_Howe.wav.new.01-10	   00:01:33:12	   00:01:42:06	   00:00:08:19	Unmuted
+1       	2       	GBBO Flurry Bake EXTENDED v4.05_Celesta_TH.wav.new.01-08	   00:01:52:06	   00:02:10:09	   00:00:18:03	Unmuted
+1       	3       	Happy Pizz 00_MIX_Howe.wav.new.01-18	   00:02:30:15	   00:02:40:24	   00:00:10:09	Unmuted
+1       	4       	GBBO 12_Sticky Parchment Paper v1.03 TIDEWAY_Perc Lo.wav.new.01-04	   00:02:57:17	   00:03:01:06	   00:00:03:13	Unmuted
+1       	5       	Orchestral Winners and Losers 00_MIX_Howe.wav.new.01-10	   00:03:17:13	   00:03:43:08	   00:00:25:19	Unmuted
+1       	6       	GBBO_Pear Shaped v1.04_2mx_TH.wav.new.02-11	   00:13:16:00	   00:13:21:07	   00:00:05:06	Unmuted
+1       	7       	GBBO14_Baked Mushroom Starter v1.03_TIDEWAY_String Pizz High 2.wav.new.01-12	   00:13:49:15	   00:13:54:07	   00:00:04:17	Unmuted
+1       	8       	GBBO14_Baked Mushroom Starter v1.03_TIDEWAY 2mx_NO WOODWIND MIX.wav.new.01-05	   00:14:03:17	   00:14:16:08	   00:00:12:15	Unmuted
+1       	9       	GBBO Flurry Bake EXTENDED v4.05_2mx_TH.wav.new.02-07	   00:15:50:03	   00:16:21:09	   00:00:31:06	Unmuted
+1       	10      	Something Pizz 03_MALLETS_Howe.wav.new.01-12	   00:18:31:01	   00:18:38:21	   00:00:07:19	Unmuted
+1       	11      	GABO4_QUIRKY_RUSH HOUR_603_CT_noSTGnPNonMARIMBA.wav.new.01-05	   00:19:59:00	   00:20:06:18	   00:00:07:18	Unmuted
+1       	12      	Countryside Air 03_WW_Howe.wav.new.01-11	   00:23:12:01	   00:23:18:17	   00:00:06:16	Unmuted
+1       	13      	GABO_PPM_HAPPY_Happy Halloumi_Jacquie Joy (APRA)_Sting1.wav.new.02-07	   00:23:32:19	   00:23:35:09	   00:00:02:14	Unmuted
+1       	14      	GBBO_Lightly Does It v1.01_Hi Strings Long_TH.wav.new.01-04	   00:24:48:21	   00:24:59:21	   00:00:11:00	Unmuted
+1       	15      	Light Whisk_02_Percussion_Howe.wav.new.01-05	   00:25:12:04	   00:25:20:24	   00:00:08:20	Unmuted
+1       	16      	GBBO14_Baked Mushroom Starter v1.03_TIDEWAY 2mx_FULL MIX.wav.new.01-04	   00:25:35:14	   00:25:53:24	   00:00:18:10	Unmuted
+1       	17      	GBBO Gentle Tension_Lo Perc_Howe.wav.new.01-04	   00:26:27:24	   00:26:36:16	   00:00:08:17	Unmuted
+1       	18      	GBBO 11_Stiff Peaks v1.11_PercCymbals_TH.wav.new.01-04	   00:26:49:14	   00:26:59:06	   00:00:09:17	Unmuted
+1       	19      	GBBO 11_Stiff Peaks v1.11_PercTimpani_TH.wav.new.02-05	   00:27:04:04	   00:27:11:16	   00:00:07:12	Unmuted
+1       	20      	Sugar Jam 00_Howe_2mx.wav.new.02-10	   00:27:20:21	   00:27:33:05	   00:00:12:09	Unmuted
+1       	21      	GBBO 12_Icing Madness v1.01 TIDEWAY_Strings Short.wav.new.01-05	   00:27:49:03	   00:27:51:04	   00:00:02:01	Unmuted
+1       	22      	GBBO Rhythmic Tension_2mx_Howe.wav.new.01-04	   00:28:11:21	   00:28:38:00	   00:00:26:04	Unmuted
+1       	23      	GBBO Icing Tension_Cymbals_Howe.wav.new.01-05	   00:29:22:14	   00:29:28:09	   00:00:05:20	Unmuted
+1       	24      	GBBO_Cream Tension v1.03_2mx_TH.wav.new.01-10	   00:30:32:00	   00:30:49:17	   00:00:17:17	Unmuted
+1       	25      	GBBO_Caramelised Pizz v1.01_Lo Strings_TH.wav.new.02-08	   00:32:01:16	   00:32:09:15	   00:00:07:23	Unmuted
+1       	26      	Ticking Tarts 00_MIX_Howe.wav.new.03-11	   00:35:21:04	   00:35:30:10	   00:00:09:06	Unmuted
+1       	27      	GBBO Rhythmic Tension_Perc Hi 1_Howe.wav.new.01-05	   00:36:35:02	   00:36:46:01	   00:00:10:24	Unmuted
+1       	28      	Emotive Bake 03_CYMBALS_Howe.wav.new.02-04	   00:36:49:06	   00:36:57:17	   00:00:08:11	Unmuted
+1       	29      	Emotive Bake 00_MIX_Howe.wav.new.03-15	   00:37:12:00	   00:37:28:22	   00:00:16:22	Unmuted
+1       	30      	GBBO 12_Petit Fours v1.05 TIDEWAY_Strings Short.wav.new.01-05	   00:50:00:03	   00:50:04:07	   00:00:04:04	Unmuted
+1       	31      	GABO_TENSE_No time to Bake_DH_02 noDRM.wav.new.01-05	   00:52:07:06	   00:52:28:17	   00:00:21:11	Unmuted
+1       	32      	Bakewell Counting 03_VIBRAPHONE_Howe.wav.new.01-05	   00:58:11:12	   00:58:20:00	   00:00:08:13	Unmuted
+1       	33      	GABO_TENSE_KITCHEN_DRAMA_308_DR_11 noSTRNGS.wav.new.01-17	   00:59:14:18	   00:59:21:11	   00:00:06:18	Unmuted
+1       	34      	Sugar Jam 00_Howe_2mx.wav.new.01-11	   01:00:08:23	   01:00:50:02	   00:00:41:04	Unmuted
+1       	35      	Light Whisk 00_MIX_Howe.wav.new.01-08	   01:01:25:12	   01:01:38:09	   00:00:12:22	Unmuted
+1       	36      	Tense Mallet Cake 00_MIX_Howe.wav.new.01-04	   01:03:21:18	   01:03:54:04	   00:00:32:11	Unmuted
+1       	37      	GABO_TENSE_DREDGE_016_AA_STR.wav.new.01-04	   01:04:07:02	   01:04:23:02	   00:00:16:00	Unmuted
+1       	38      	3s_FOXTEL_new.new.02-08       	   01:05:23:21	   01:05:26:21	   00:00:03:00	Unmuted
+
+
+2       	1       	Rising Tension Bake 04_Mallets_Howe.wav.new.01-09	   00:01:33:12	   00:01:42:06	   00:00:08:19	Unmuted
+2       	2       	GBBO Flurry Bake EXTENDED v4.05_Celesta_TH.wav.new.01-10	   00:01:52:06	   00:02:10:09	   00:00:18:03	Unmuted
+2       	3       	Happy Pizz 00_MIX_Howe.wav.new.01-19	   00:02:30:15	   00:02:40:24	   00:00:10:09	Unmuted
+2       	4       	GBBO 12_Sticky Parchment Paper v1.03 TIDEWAY_Perc Lo.wav.new.01-05	   00:02:57:17	   00:03:01:06	   00:00:03:13	Unmuted
+2       	5       	Orchestral Winners and Losers 00_MIX_Howe.wav.new.01-11	   00:03:17:13	   00:03:43:08	   00:00:25:19	Unmuted
+2       	6       	GBBO_Pear Shaped v1.04_2mx_TH.wav.new.02-08	   00:13:16:00	   00:13:21:07	   00:00:05:06	Unmuted
+2       	7       	GBBO14_Baked Mushroom Starter v1.03_TIDEWAY_String Pizz High 2.wav.new.01-13	   00:13:49:15	   00:13:54:07	   00:00:04:17	Unmuted
+2       	8       	GBBO14_Baked Mushroom Starter v1.03_TIDEWAY 2mx_NO WOODWIND MIX.wav.new.01-04	   00:14:03:17	   00:14:16:08	   00:00:12:15	Unmuted
+2       	9       	GBBO Flurry Bake EXTENDED v4.05_2mx_TH.wav.new.02-06	   00:15:50:03	   00:16:21:09	   00:00:31:06	Unmuted
+2       	10      	Something Pizz 03_MALLETS_Howe.wav.new.01-11	   00:18:31:01	   00:18:38:21	   00:00:07:19	Unmuted
+2       	11      	GABO4_QUIRKY_RUSH HOUR_603_CT_noSTGnPNonMARIMBA.wav.new.01-04	   00:19:59:00	   00:20:06:18	   00:00:07:18	Unmuted
+2       	12      	Countryside Air 03_WW_Howe.wav.new.01-12	   00:23:12:01	   00:23:18:17	   00:00:06:16	Unmuted
+2       	13      	GABO_PPM_HAPPY_Happy Halloumi_Jacquie Joy (APRA)_Sting1.wav.new.02-09	   00:23:32:19	   00:23:35:09	   00:00:02:14	Unmuted
+2       	14      	GBBO_Lightly Does It v1.01_Hi Strings Long_TH.wav.new.01-05	   00:24:48:21	   00:24:59:21	   00:00:11:00	Unmuted
+2       	15      	Light Whisk_02_Percussion_Howe.wav.new.01-04	   00:25:12:04	   00:25:20:24	   00:00:08:20	Unmuted
+2       	16      	GBBO14_Baked Mushroom Starter v1.03_TIDEWAY 2mx_FULL MIX.wav.new.02-02	   00:25:35:14	   00:25:53:24	   00:00:18:10	Unmuted
+2       	17      	GBBO Gentle Tension_Lo Perc_Howe.wav.new.01-05	   00:26:27:24	   00:26:36:16	   00:00:08:17	Unmuted
+2       	18      	GBBO 11_Stiff Peaks v1.11_PercCymbals_TH.wav.new.01-05	   00:26:49:14	   00:26:59:06	   00:00:09:17	Unmuted
+2       	19      	GBBO 11_Stiff Peaks v1.11_PercTimpani_TH.wav.new.02-04	   00:27:04:04	   00:27:11:16	   00:00:07:12	Unmuted
+2       	20      	Sugar Jam 00_Howe_2mx.wav.new.02-08	   00:27:20:21	   00:27:33:05	   00:00:12:09	Unmuted
+2       	21      	GBBO 12_Icing Madness v1.01 TIDEWAY_Strings Short.wav.new.01-04	   00:27:49:03	   00:27:51:04	   00:00:02:01	Unmuted
+2       	22      	GBBO Rhythmic Tension_2mx_Howe.wav.new.01-05	   00:28:11:21	   00:28:38:00	   00:00:26:04	Unmuted
+2       	23      	GBBO Icing Tension_Cymbals_Howe.wav.new.01-04	   00:29:22:14	   00:29:28:09	   00:00:05:20	Unmuted
+2       	24      	GBBO_Cream Tension v1.03_2mx_TH.wav.new.01-08	   00:30:32:00	   00:30:49:17	   00:00:17:17	Unmuted
+2       	25      	GBBO_Caramelised Pizz v1.01_Lo Strings_TH.wav.new.02-10	   00:32:01:16	   00:32:09:15	   00:00:07:23	Unmuted
+2       	26      	Ticking Tarts 00_MIX_Howe.wav.new.03-08	   00:35:21:04	   00:35:30:10	   00:00:09:06	Unmuted
+2       	27      	GBBO Rhythmic Tension_Perc Hi 1_Howe.wav.new.01-04	   00:36:35:02	   00:36:46:01	   00:00:10:24	Unmuted
+2       	28      	Emotive Bake 03_CYMBALS_Howe.wav.new.02-05	   00:36:49:06	   00:36:57:17	   00:00:08:11	Unmuted
+2       	29      	Emotive Bake 00_MIX_Howe.wav.new.03-16	   00:37:12:00	   00:37:28:22	   00:00:16:22	Unmuted
+2       	30      	GBBO 12_Petit Fours v1.05 TIDEWAY_Strings Short.wav.new.01-04	   00:50:00:03	   00:50:04:07	   00:00:04:04	Unmuted
+2       	31      	GABO_TENSE_No time to Bake_DH_02 noDRM.wav.new.01-04	   00:52:07:06	   00:52:28:17	   00:00:21:11	Unmuted
+2       	32      	Bakewell Counting 03_VIBRAPHONE_Howe.wav.new.01-04	   00:58:11:12	   00:58:20:00	   00:00:08:13	Unmuted
+2       	33      	GABO_TENSE_KITCHEN_DRAMA_308_DR_11 noSTRNGS.wav.new.01-23	   00:59:14:18	   00:59:21:11	   00:00:06:18	Unmuted
+2       	34      	Sugar Jam 00_Howe_2mx.wav.new.01-08	   01:00:08:23	   01:00:50:02	   00:00:41:04	Unmuted
+2       	35      	Light Whisk 00_MIX_Howe.wav.new.01-10	   01:01:25:12	   01:01:38:09	   00:00:12:22	Unmuted
+2       	36      	Tense Mallet Cake 00_MIX_Howe.wav.new.01-05	   01:03:21:18	   01:03:54:04	   00:00:32:11	Unmuted
+2       	37      	GABO_TENSE_DREDGE_016_AA_STR.wav.new.01-05	   01:04:07:02	   01:04:23:02	   00:00:16:00	Unmuted
+2       	38      	3s_FOXTEL_new.new.02-09       	   01:05:23:21	   01:05:26:21	   00:00:03:00	Unmuted
+
+
+TRACK NAME:	MX a4 (Stereo)
+COMMENTS:	
+USER DELAY:	0 Samples
+STATE: 
+CHANNEL 	EVENT   	CLIP NAME                     	START TIME    	END TIME      	DURATION      	STATE
+1       	1       	GBBO Flurry Bake EXTENDED v4.05_Hi WW_TH.wav.new.01-08	   00:01:52:06	   00:02:10:20	   00:00:18:14	Unmuted
+1       	2       	Happy Pizz 03_WW_Howe.wav.new.01-05	   00:02:30:00	   00:02:32:10	   00:00:02:10	Unmuted
+1       	3       	Happy Pizz 00_MIX_Howe.wav.new.02-15	   00:02:40:23	   00:02:44:15	   00:00:03:17	Unmuted
+1       	4       	Orchestral Winners and Losers 05_PERCUSSION_Howe.wav.new.01-08	   00:03:06:01	   00:03:17:24	   00:00:11:23	Unmuted
+1       	5       	ring-the-bell-04.L            	   00:04:25:13	   00:05:00:18	   00:00:35:05	Unmuted
+1       	6       	GBBO_Pear Shaped_v1.04_Celeste_TH.wav.new.01-05	   00:13:20:14	   00:13:26:15	   00:00:06:00	Unmuted
+1       	7       	GBBO14_Baked Mushroom Starter v1.03_TIDEWAY_String Short.wav.new.01-08	   00:13:54:04	   00:13:57:09	   00:00:03:04	Unmuted
+1       	8       	GBBO Flurry Bake EXTENDED v4.05_Lo Strings Pizz_TH.wav.new.01-07	   00:15:46:01	   00:15:50:11	   00:00:04:09	Unmuted
+1       	9       	Countryside Air 02_LOW_STRINGS_Howe.wav.new.01-09	   00:23:18:04	   00:23:19:12	   00:00:01:08	Unmuted
+1       	10      	GBBO_Lightly Does It v1.01_Hi Strings Pizz_TH.wav.new.01-04	   00:24:50:04	   00:24:59:21	   00:00:09:17	Unmuted
+1       	11      	GBBO14_Baked Mushroom Starter v1.03_TIDEWAY_Perc High.wav.new.01-05	   00:25:53:15	   00:26:03:09	   00:00:09:19	Unmuted
+1       	12      	GBBO Gentle Tension_Long Winds_Howe.wav.new.01-08	   00:26:26:11	   00:26:33:19	   00:00:07:07	Unmuted
+1       	13      	GBBO 11_Stiff Peaks v1.11_PercTimpani_TH.wav.new.01-06	   00:26:49:19	   00:26:59:02	   00:00:09:08	Unmuted
+1       	14      	GBBO Rhythmic Tension_Bells_Howe.wav.new.01-16	   00:28:32:00	   00:28:41:06	   00:00:09:06	Unmuted
+1       	15      	GBBO 11_Melting Meringues v1.02_Mallets_TH.wav.new.01-08	   00:29:29:01	   00:30:16:04	   00:00:47:03	Unmuted
+1       	16      	GBBO Rhythmic Tension_Perc Lo_Howe.wav.new.02-02	   00:36:34:16	   00:36:46:00	   00:00:11:09	Unmuted
+1       	17      	Emotive Bake 04_STRINGS_Howe.wav.new.01-10	   00:36:50:09	   00:36:54:10	   00:00:04:01	Unmuted
+1       	18      	Emotive Bake 04_STRINGS_Howe.wav.new.02-05	   00:37:08:18	   00:37:13:09	   00:00:04:15	Unmuted
+1       	19      	GBBO 12_Petit Fours v1.05 TIDEWAY_2mx.wav.new.02-34	   00:50:04:12	   00:50:07:10	   00:00:02:22	Unmuted
+1       	20      	GBBO 12_Petit Fours v1.05 TIDEWAY_2mx.wav.new.02-33	   00:50:08:00	   00:50:09:14	   00:00:01:14	Unmuted
+1       	21      	GABO_TENSE_MIXER_011v2_AA_01 FULL.wav.new.01-09	   00:59:19:00	   00:59:42:17	   00:00:23:17	Unmuted
+1       	22      	Light Whisk_07_Short WW's_Howe.wav.new.02-04	   01:01:34:09	   01:01:41:15	   00:00:07:06	Unmuted
+
+
+2       	1       	GBBO Flurry Bake EXTENDED v4.05_Hi WW_TH.wav.new.01-10	   00:01:52:06	   00:02:10:20	   00:00:18:14	Unmuted
+2       	2       	Happy Pizz 03_WW_Howe.wav.new.01-04	   00:02:30:00	   00:02:32:10	   00:00:02:10	Unmuted
+2       	3       	Happy Pizz 00_MIX_Howe.wav.new.02-16	   00:02:40:23	   00:02:44:15	   00:00:03:17	Unmuted
+2       	4       	Orchestral Winners and Losers 05_PERCUSSION_Howe.wav.new.01-10	   00:03:06:01	   00:03:17:24	   00:00:11:23	Unmuted
+2       	5       	ring-the-bell-04.R            	   00:04:25:13	   00:05:00:18	   00:00:35:05	Unmuted
+2       	6       	GBBO_Pear Shaped_v1.04_Celeste_TH.wav.new.01-04	   00:13:20:14	   00:13:26:15	   00:00:06:00	Unmuted
+2       	7       	GBBO14_Baked Mushroom Starter v1.03_TIDEWAY_String Short.wav.new.01-10	   00:13:54:04	   00:13:57:09	   00:00:03:04	Unmuted
+2       	8       	GBBO Flurry Bake EXTENDED v4.05_Lo Strings Pizz_TH.wav.new.01-06	   00:15:46:01	   00:15:50:11	   00:00:04:09	Unmuted
+2       	9       	Countryside Air 02_LOW_STRINGS_Howe.wav.new.01-11	   00:23:18:04	   00:23:19:12	   00:00:01:08	Unmuted
+2       	10      	GBBO_Lightly Does It v1.01_Hi Strings Pizz_TH.wav.new.01-05	   00:24:50:04	   00:24:59:21	   00:00:09:17	Unmuted
+2       	11      	GBBO14_Baked Mushroom Starter v1.03_TIDEWAY_Perc High.wav.new.01-04	   00:25:53:15	   00:26:03:09	   00:00:09:19	Unmuted
+2       	12      	GBBO Gentle Tension_Long Winds_Howe.wav.new.01-10	   00:26:26:11	   00:26:33:19	   00:00:07:07	Unmuted
+2       	13      	GBBO 11_Stiff Peaks v1.11_PercTimpani_TH.wav.new.01-08	   00:26:49:19	   00:26:59:02	   00:00:09:08	Unmuted
+2       	14      	GBBO Rhythmic Tension_Bells_Howe.wav.new.01-12	   00:28:32:00	   00:28:41:06	   00:00:09:06	Unmuted
+2       	15      	GBBO 11_Melting Meringues v1.02_Mallets_TH.wav.new.01-10	   00:29:29:01	   00:30:16:04	   00:00:47:03	Unmuted
+2       	16      	GBBO Rhythmic Tension_Strings Long_Howe.wav.new.02-02	   00:36:34:16	   00:36:46:00	   00:00:11:09	Unmuted
+2       	17      	Emotive Bake 04_STRINGS_Howe.wav.new.01-09	   00:36:50:09	   00:36:54:10	   00:00:04:01	Unmuted
+2       	18      	Emotive Bake 04_STRINGS_Howe.wav.new.02-04	   00:37:08:18	   00:37:13:09	   00:00:04:15	Unmuted
+2       	19      	GBBO 12_Petit Fours v1.05 TIDEWAY_2mx.wav.new.02-39	   00:50:04:12	   00:50:07:10	   00:00:02:22	Unmuted
+2       	20      	GBBO 12_Petit Fours v1.05 TIDEWAY_2mx.wav.new.02-40	   00:50:08:00	   00:50:09:14	   00:00:01:14	Unmuted
+2       	21      	GABO_TENSE_MIXER_011v2_AA_01 FULL.wav.new.01-10	   00:59:19:00	   00:59:42:17	   00:00:23:17	Unmuted
+2       	22      	Light Whisk_07_Short WW's_Howe.wav.new.02-05	   01:01:34:09	   01:01:41:15	   00:00:07:06	Unmuted
+
+
+TRACK NAME:	MX a5 (Stereo)
+COMMENTS:	
+USER DELAY:	0 Samples
+STATE: 
+CHANNEL 	EVENT   	CLIP NAME                     	START TIME    	END TIME      	DURATION      	STATE
+1       	1       	GBBO Flurry Bake EXTENDED v4.05_Cymbals_TH.wav.new.01-04	   00:01:52:06	   00:02:10:20	   00:00:18:14	Unmuted
+1       	2       	Orchestral Winners and Losers 04_GTRS_Howe.wav.new.01-04	   00:03:09:23	   00:03:17:24	   00:00:08:01	Unmuted
+1       	3       	ring-the-bell-pianoanddrones-02.L	   00:04:58:22	   00:05:00:21	   00:00:01:24	Unmuted
+1       	4       	GBBO14_Baked Mushroom Starter v1.03_TIDEWAY_String Pizz Low.wav.new.01-11	   00:13:54:04	   00:13:57:21	   00:00:03:16	Unmuted
+1       	5       	Countryside Air 03_WW_Howe.wav.new.01-14	   00:23:18:09	   00:23:20:24	   00:00:02:14	Unmuted
+1       	6       	GBBO14_Baked Mushroom Starter v1.03_TIDEWAY_String Pizz High 2.wav.new.01-16	   00:25:53:13	   00:26:08:08	   00:00:14:19	Unmuted
+1       	7       	GBBO 11_Melting Meringues v1.02_WWShort_TH.wav.new.01-09	   00:26:37:08	   00:26:50:14	   00:00:13:06	Unmuted
+1       	8       	GBBO 11_Stiff Peaks v1.11_PercHigh_TH.wav.new.01-05	   00:26:57:05	   00:27:03:23	   00:00:06:18	Unmuted
+1       	9       	GBBO Rhythmic Tension_Perc Lo_Howe.wav.new.01-17	   00:28:31:24	   00:28:36:08	   00:00:04:09	Unmuted
+1       	10      	GBBO Rhythmic Tension_Perc Lo_Howe.wav.new.01-14	   00:28:37:02	   00:28:41:04	   00:00:04:01	Unmuted
+1       	11      	GBBO 11_Melting Meringues v1.02_PercMidLow_TH.wav.new.01-13	   00:29:24:22	   00:29:31:04	   00:00:06:07	Unmuted
+1       	12      	GBBO 11_Melting Meringues v1.02_PercMidLow_TH.wav.new.01-16	   00:29:40:02	   00:29:54:19	   00:00:14:16	Unmuted
+1       	13      	GBBO Rhythmic Tension_Strings Long_Howe.wav.new.01-04	   00:36:32:04	   00:36:38:16	   00:00:06:12	Unmuted
+1       	14      	GBBO 12_Petit Fours v1.05 TIDEWAY_2mx.wav.new.02-36	   00:50:04:06	   00:50:09:03	   00:00:04:22	Unmuted
+1       	15      	GABO_TENSE_MIXER_011v2_AA_07 ATMOSDRMFX.wav.new.01-04	   00:59:41:04	   00:59:46:17	   00:00:05:12	Unmuted
+
+
+2       	1       	GBBO Flurry Bake EXTENDED v4.05_Cymbals_TH.wav.new.01-05	   00:01:52:06	   00:02:10:20	   00:00:18:14	Unmuted
+2       	2       	Orchestral Winners and Losers 04_GTRS_Howe.wav.new.01-05	   00:03:09:23	   00:03:17:24	   00:00:08:01	Unmuted
+2       	3       	ring-the-bell-pianoanddrones-02.R	   00:04:58:22	   00:05:00:21	   00:00:01:24	Unmuted
+2       	4       	GBBO14_Baked Mushroom Starter v1.03_TIDEWAY_String Pizz Low.wav.new.01-08	   00:13:54:04	   00:13:57:21	   00:00:03:16	Unmuted
+2       	5       	Countryside Air 03_WW_Howe.wav.new.01-18	   00:23:18:09	   00:23:20:24	   00:00:02:14	Unmuted
+2       	6       	GBBO14_Baked Mushroom Starter v1.03_TIDEWAY_String Pizz High 2.wav.new.01-14	   00:25:53:13	   00:26:08:08	   00:00:14:19	Unmuted
+2       	7       	GBBO 11_Melting Meringues v1.02_WWShort_TH.wav.new.01-10	   00:26:37:08	   00:26:50:14	   00:00:13:06	Unmuted
+2       	8       	GBBO 11_Stiff Peaks v1.11_PercHigh_TH.wav.new.01-04	   00:26:57:05	   00:27:03:23	   00:00:06:18	Unmuted
+2       	9       	GBBO Rhythmic Tension_Perc Lo_Howe.wav.new.01-12	   00:28:31:24	   00:28:36:08	   00:00:04:09	Unmuted
+2       	10      	GBBO Rhythmic Tension_Perc Lo_Howe.wav.new.01-13	   00:28:37:02	   00:28:41:04	   00:00:04:01	Unmuted
+2       	11      	GBBO 11_Melting Meringues v1.02_PercMidLow_TH.wav.new.01-14	   00:29:24:22	   00:29:31:04	   00:00:06:07	Unmuted
+2       	12      	GBBO 11_Melting Meringues v1.02_PercMidLow_TH.wav.new.01-15	   00:29:40:02	   00:29:54:19	   00:00:14:16	Unmuted
+2       	13      	GBBO Rhythmic Tension_Strings Long_Howe.wav.new.01-05	   00:36:32:04	   00:36:38:16	   00:00:06:12	Unmuted
+2       	14      	GBBO 12_Petit Fours v1.05 TIDEWAY_2mx.wav.new.02-35	   00:50:04:06	   00:50:09:03	   00:00:04:22	Unmuted
+2       	15      	GABO_TENSE_MIXER_011v2_AA_07 ATMOSDRMFX.wav.new.01-05	   00:59:41:04	   00:59:46:17	   00:00:05:12	Unmuted
+
+
+TRACK NAME:	MX a6 (Stereo)
+COMMENTS:	
+USER DELAY:	0 Samples
+STATE: 
+CHANNEL 	EVENT   	CLIP NAME                     	START TIME    	END TIME      	DURATION      	STATE
+1       	1       	GBBO Flurry Bake EXTENDED v4.05_Harpsichord_TH.wav.new.01-08	   00:01:52:06	   00:02:10:20	   00:00:18:14	Unmuted
+1       	2       	Orchestral Winners and Losers 02_BRASS_Howe.wav.new.01-08	   00:03:01:24	   00:03:17:24	   00:00:16:00	Unmuted
+1       	3       	GBBO14_Baked Mushroom Starter v1.03_TIDEWAY_String Pizz High 2.wav.new.01-17	   00:13:54:04	   00:13:57:21	   00:00:03:16	Unmuted
+1       	4       	GBBO 11_Melting Meringues v1.02_PercAux_TH.wav.new.01-05	   00:26:37:08	   00:26:49:04	   00:00:11:21	Unmuted
+1       	5       	GBBO 11_Melting Meringues v1.02_PercAux_TH.wav.new.02-10	   00:29:25:15	   00:29:48:18	   00:00:23:03	Unmuted
+
+
+2       	1       	GBBO Flurry Bake EXTENDED v4.05_Harpsichord_TH.wav.new.01-10	   00:01:52:06	   00:02:10:20	   00:00:18:14	Unmuted
+2       	2       	Orchestral Winners and Losers 02_BRASS_Howe.wav.new.01-10	   00:03:01:24	   00:03:17:24	   00:00:16:00	Unmuted
+2       	3       	GBBO14_Baked Mushroom Starter v1.03_TIDEWAY_String Pizz High 2.wav.new.01-15	   00:13:54:04	   00:13:57:21	   00:00:03:16	Unmuted
+2       	4       	GBBO 11_Melting Meringues v1.02_PercAux_TH.wav.new.01-04	   00:26:37:08	   00:26:49:04	   00:00:11:21	Unmuted
+2       	5       	GBBO 11_Melting Meringues v1.02_PercAux_TH.wav.new.02-08	   00:29:25:15	   00:29:48:18	   00:00:23:03	Unmuted
+
+
+TRACK NAME:	MX a7 (Stereo)
+COMMENTS:	
+USER DELAY:	0 Samples
+STATE: 
+CHANNEL 	EVENT   	CLIP NAME                     	START TIME    	END TIME      	DURATION      	STATE
+1       	1       	GBBO Flurry Bake EXTENDED v4.05_Lo WW_TH.wav.new.01-08	   00:01:52:06	   00:02:10:20	   00:00:18:14	Unmuted
+1       	2       	Orchestral Winners and Losers 01_STRINGS_Howe.wav.new.01-04	   00:03:09:23	   00:03:17:24	   00:00:08:01	Unmuted
+1       	3       	GBBO 11_Melting Meringues v1.02_Cymbals_TH.wav.new.01-04	   00:26:39:22	   00:26:47:18	   00:00:07:21	Unmuted
+
+
+2       	1       	GBBO Flurry Bake EXTENDED v4.05_Lo WW_TH.wav.new.01-10	   00:01:52:06	   00:02:10:20	   00:00:18:14	Unmuted
+2       	2       	Orchestral Winners and Losers 01_STRINGS_Howe.wav.new.01-05	   00:03:09:23	   00:03:17:24	   00:00:08:01	Unmuted
+2       	3       	GBBO 11_Melting Meringues v1.02_Cymbals_TH.wav.new.01-05	   00:26:39:22	   00:26:47:18	   00:00:07:21	Unmuted
+
+
+TRACK NAME:	MX a8 (Stereo)
+COMMENTS:	
+USER DELAY:	0 Samples
+STATE: 
+CHANNEL 	EVENT   	CLIP NAME                     	START TIME    	END TIME      	DURATION      	STATE
+1       	1       	GBBO Flurry Bake EXTENDED v4.05_Hi Perc Pulse_TH.wav.new.01-05	   00:01:52:06	   00:01:56:21	   00:00:04:15	Unmuted
+1       	2       	GBBO Flurry Bake EXTENDED v4.05_Timpanis_TH.wav.new.02-05	   00:02:06:07	   00:02:10:20	   00:00:04:13	Unmuted
+
+
+2       	1       	GBBO Flurry Bake EXTENDED v4.05_Hi Perc Pulse_TH.wav.new.01-04	   00:01:52:06	   00:01:56:21	   00:00:04:15	Unmuted
+2       	2       	GBBO Flurry Bake EXTENDED v4.05_Timpanis_TH.wav.new.02-04	   00:02:06:07	   00:02:10:20	   00:00:04:13	Unmuted
+
+
+TRACK NAME:	MX FX b1 (Stereo)
+COMMENTS:	
+USER DELAY:	0 Samples
+STATE: 
+CHANNEL 	EVENT   	CLIP NAME                     	START TIME    	END TIME      	DURATION      	STATE
+1       	1       	Rising Tension Bake 01_Cymbals_Howe.wav.new.01-08	   00:01:41:07	   00:01:48:04	   00:00:06:22	Unmuted
+1       	2       	Rising Tension Bake 01_Cymbals_Howe.wav.new.01-09	   00:01:51:03	   00:01:58:11	   00:00:07:08	Unmuted
+1       	3       	GBBO Light Busy Tension_Hi Perc & Cymbals_Howe.wav.new.01-04	   00:02:15:24	   00:02:19:05	   00:00:03:06	Unmuted
+1       	4       	GBBO Light Busy Tension_Hi Perc & Cymbals_Howe.wav.new.01-06	   00:06:11:18	   00:06:18:04	   00:00:06:10	Unmuted
+1       	5       	GBBO Light Busy Tension_Hi Perc & Cymbals_Howe.wav.new.01-12	   00:19:12:10	   00:19:18:22	   00:00:06:11	Unmuted
+1       	6       	GBBO Light Busy Tension_Hi Perc & Cymbals_Howe.wav.new.01-14	   00:20:51:14	   00:20:57:10	   00:00:05:20	Unmuted
+1       	7       	GBBO Light Busy Tension_Hi Perc & Cymbals_Howe.wav.new.01-06	   00:21:46:13	   00:21:52:24	   00:00:06:10	Unmuted
+1       	8       	Elefat107_Trk8_Cymbal_H_Sam_Music-08.L	   00:23:30:18	   00:23:42:18	   00:00:12:00	Unmuted
+1       	9       	GBBO Light Busy Tension_Hi Perc & Cymbals_Howe.wav.new.01-09	   00:25:11:02	   00:25:17:13	   00:00:06:10	Unmuted
+1       	10      	22 Thunder Roll (Timpani)-01.L	   00:27:17:01	   00:27:19:07	   00:00:02:05	Unmuted
+1       	11      	Elefat107_Trk8_Cymbal_H_Sam_Music-01.L	   00:30:30:09	   00:30:42:09	   00:00:12:00	Unmuted
+1       	12      	Elefat107_Trk8_Cymbal_H_Sam_Music-01.L	   00:30:45:17	   00:30:57:17	   00:00:12:00	Unmuted
+1       	13      	Elefat107_Trk8_Cymbal_H_Sam_Music-01.L	   00:31:05:09	   00:31:17:09	   00:00:12:00	Unmuted
+1       	14      	Elefat107_Trk8_Cymbal_H_Sam_Music-01.L	   00:31:32:10	   00:31:44:10	   00:00:12:00	Unmuted
+1       	15      	Elefat107_Trk8_Cymbal_H_Sam_Music-01.L	   00:31:59:18	   00:32:11:18	   00:00:12:00	Unmuted
+1       	16      	Elefat107_Trk8_Cymbal_H_Sam_Music-01.L	   00:32:18:22	   00:32:30:22	   00:00:12:00	Unmuted
+1       	17      	Elefat107_Trk8_Cymbal_H_Sam_Music-02.L	   00:32:56:02	   00:33:08:02	   00:00:12:00	Unmuted
+1       	18      	Elefat107_Trk8_Cymbal_H_Sam_Music-02.L	   00:37:09:23	   00:37:21:23	   00:00:12:00	Unmuted
+1       	19      	Elefat107_Trk8_Cymbal_H_Sam_Music-03.L	   00:37:22:18	   00:37:34:18	   00:00:12:00	Unmuted
+1       	20      	Elefat107_Trk8_Cymbal_H_Sam_Music-03.L	   00:37:37:21	   00:37:49:21	   00:00:12:00	Unmuted
+1       	21      	Elefat107_Trk8_Cymbal_H_Sam_Music-04.L	   00:38:08:18	   00:38:20:18	   00:00:12:00	Unmuted
+1       	22      	Elefat107_Trk8_Cymbal_H_Sam_Music-05.L	   00:41:30:00	   00:41:42:00	   00:00:12:00	Unmuted
+1       	23      	Elefat107_Trk8_Cymbal_H_Sam_Music-05.L	   00:42:35:11	   00:42:47:11	   00:00:12:00	Unmuted
+1       	24      	GBBO Light Busy Tension_Hi Perc & Cymbals_Howe.wav.new.01-09	   00:46:50:21	   00:46:57:07	   00:00:06:10	Unmuted
+1       	25      	Elefat107_Trk8_Cymbal_H_Sam_Music-05.L	   00:51:18:21	   00:51:30:21	   00:00:12:00	Unmuted
+1       	26      	GBBO Light Busy Tension_Hi Perc & Cymbals_Howe.wav.new.01-10	   00:55:17:03	   00:55:23:14	   00:00:06:10	Unmuted
+1       	27      	Elefat107_Trk8_Cymbal_H_Sam_Music-05.L	   00:56:08:24	   00:56:20:24	   00:00:12:00	Unmuted
+1       	28      	Elefat107_Trk8_Cymbal_H_Sam_Music-05.L	   00:57:57:09	   00:58:09:09	   00:00:12:00	Unmuted
+
+
+2       	1       	Rising Tension Bake 01_Cymbals_Howe.wav.new.01-11	   00:01:41:07	   00:01:48:04	   00:00:06:22	Unmuted
+2       	2       	Rising Tension Bake 01_Cymbals_Howe.wav.new.01-10	   00:01:51:03	   00:01:58:11	   00:00:07:08	Unmuted
+2       	3       	GBBO Light Busy Tension_Hi Perc & Cymbals_Howe.wav.new.01-05	   00:02:15:24	   00:02:19:05	   00:00:03:06	Unmuted
+2       	4       	GBBO Light Busy Tension_Hi Perc & Cymbals_Howe.wav.new.01-07	   00:06:11:18	   00:06:18:04	   00:00:06:10	Unmuted
+2       	5       	GBBO Light Busy Tension_Hi Perc & Cymbals_Howe.wav.new.01-13	   00:19:12:10	   00:19:18:22	   00:00:06:11	Unmuted
+2       	6       	GBBO Light Busy Tension_Hi Perc & Cymbals_Howe.wav.new.01-15	   00:20:51:14	   00:20:57:10	   00:00:05:20	Unmuted
+2       	7       	GBBO Light Busy Tension_Hi Perc & Cymbals_Howe.wav.new.01-07	   00:21:46:13	   00:21:52:24	   00:00:06:10	Unmuted
+2       	8       	Elefat107_Trk8_Cymbal_H_Sam_Music-08.R	   00:23:30:18	   00:23:42:18	   00:00:12:00	Unmuted
+2       	9       	GBBO Light Busy Tension_Hi Perc & Cymbals_Howe.wav.new.01-08	   00:25:11:02	   00:25:17:13	   00:00:06:10	Unmuted
+2       	10      	22 Thunder Roll (Timpani)-01.R	   00:27:17:01	   00:27:19:07	   00:00:02:05	Unmuted
+2       	11      	Elefat107_Trk8_Cymbal_H_Sam_Music-01.R	   00:30:30:09	   00:30:42:09	   00:00:12:00	Unmuted
+2       	12      	Elefat107_Trk8_Cymbal_H_Sam_Music-01.R	   00:30:45:17	   00:30:57:17	   00:00:12:00	Unmuted
+2       	13      	Elefat107_Trk8_Cymbal_H_Sam_Music-01.R	   00:31:05:09	   00:31:17:09	   00:00:12:00	Unmuted
+2       	14      	Elefat107_Trk8_Cymbal_H_Sam_Music-01.R	   00:31:32:10	   00:31:44:10	   00:00:12:00	Unmuted
+2       	15      	Elefat107_Trk8_Cymbal_H_Sam_Music-01.R	   00:31:59:18	   00:32:11:18	   00:00:12:00	Unmuted
+2       	16      	Elefat107_Trk8_Cymbal_H_Sam_Music-01.R	   00:32:18:22	   00:32:30:22	   00:00:12:00	Unmuted
+2       	17      	Elefat107_Trk8_Cymbal_H_Sam_Music-02.R	   00:32:56:02	   00:33:08:02	   00:00:12:00	Unmuted
+2       	18      	Elefat107_Trk8_Cymbal_H_Sam_Music-02.R	   00:37:09:23	   00:37:21:23	   00:00:12:00	Unmuted
+2       	19      	Elefat107_Trk8_Cymbal_H_Sam_Music-03.R	   00:37:22:18	   00:37:34:18	   00:00:12:00	Unmuted
+2       	20      	Elefat107_Trk8_Cymbal_H_Sam_Music-03.R	   00:37:37:21	   00:37:49:21	   00:00:12:00	Unmuted
+2       	21      	Elefat107_Trk8_Cymbal_H_Sam_Music-04.R	   00:38:08:18	   00:38:20:18	   00:00:12:00	Unmuted
+2       	22      	Elefat107_Trk8_Cymbal_H_Sam_Music-05.R	   00:41:30:00	   00:41:42:00	   00:00:12:00	Unmuted
+2       	23      	Elefat107_Trk8_Cymbal_H_Sam_Music-05.R	   00:42:35:11	   00:42:47:11	   00:00:12:00	Unmuted
+2       	24      	GBBO Light Busy Tension_Hi Perc & Cymbals_Howe.wav.new.01-08	   00:46:50:21	   00:46:57:07	   00:00:06:10	Unmuted
+2       	25      	Elefat107_Trk8_Cymbal_H_Sam_Music-05.R	   00:51:18:21	   00:51:30:21	   00:00:12:00	Unmuted
+2       	26      	GBBO Light Busy Tension_Hi Perc & Cymbals_Howe.wav.new.01-11	   00:55:17:03	   00:55:23:14	   00:00:06:10	Unmuted
+2       	27      	Elefat107_Trk8_Cymbal_H_Sam_Music-05.R	   00:56:08:24	   00:56:20:24	   00:00:12:00	Unmuted
+2       	28      	Elefat107_Trk8_Cymbal_H_Sam_Music-05.R	   00:57:57:09	   00:58:09:09	   00:00:12:00	Unmuted
+
+
+TRACK NAME:	MX FX b2 (Stereo)
+COMMENTS:	
+USER DELAY:	0 Samples
+STATE: 
+CHANNEL 	EVENT   	CLIP NAME                     	START TIME    	END TIME      	DURATION      	STATE
+1       	1       	GBBO Flurry Bake EXTENDED v4.05_Timpanis_TH.wav.new.01-12	   00:01:50:07	   00:01:56:15	   00:00:06:08	Unmuted
+1       	2       	Rising Tension Bake Xmas_CYMBALS_Howe.wav.new.02-05	   00:02:15:21	   00:02:21:03	   00:00:05:07	Unmuted
+1       	3       	Elefat107_Trk8_Cymbal_H_Sam_Music-09.L	   00:04:57:02	   00:05:09:02	   00:00:12:00	Unmuted
+1       	4       	Rising Tension Bake Xmas_CYMBALS_Howe.wav.new.02-07	   00:06:11:03	   00:06:16:22	   00:00:05:19	Unmuted
+1       	5       	Elefat107_Trk8_Cymbal_H_Sam_Music-07.L	   00:18:55:12	   00:19:07:12	   00:00:12:00	Unmuted
+1       	6       	Rising Tension Bake Xmas_CYMBALS_Howe.wav.new.02-20	   00:21:52:15	   00:21:58:18	   00:00:06:03	Unmuted
+1       	7       	Rising Tension Bake Xmas_CYMBALS_Howe.wav.new.02-12	   00:25:10:12	   00:25:16:06	   00:00:05:18	Unmuted
+1       	8       	Rising Tension Bake Xmas_CYMBALS_Howe.wav.new.02-12	   00:46:50:07	   00:46:56:00	   00:00:05:18	Unmuted
+1       	9       	Rising Tension Bake Xmas_CYMBALS_Howe.wav.new.02-16	   00:55:16:13	   00:55:22:07	   00:00:05:18	Unmuted
+
+
+2       	1       	GBBO Flurry Bake EXTENDED v4.05_Timpanis_TH.wav.new.01-13	   00:01:50:07	   00:01:56:15	   00:00:06:08	Unmuted
+2       	2       	Rising Tension Bake Xmas_CYMBALS_Howe.wav.new.02-04	   00:02:15:21	   00:02:21:03	   00:00:05:07	Unmuted
+2       	3       	Elefat107_Trk8_Cymbal_H_Sam_Music-09.R	   00:04:57:02	   00:05:09:02	   00:00:12:00	Unmuted
+2       	4       	Rising Tension Bake Xmas_CYMBALS_Howe.wav.new.02-06	   00:06:11:03	   00:06:16:22	   00:00:05:19	Unmuted
+2       	5       	Elefat107_Trk8_Cymbal_H_Sam_Music-07.R	   00:18:55:12	   00:19:07:12	   00:00:12:00	Unmuted
+2       	6       	Rising Tension Bake Xmas_CYMBALS_Howe.wav.new.02-21	   00:21:52:15	   00:21:58:18	   00:00:06:03	Unmuted
+2       	7       	Rising Tension Bake Xmas_CYMBALS_Howe.wav.new.02-13	   00:25:10:12	   00:25:16:06	   00:00:05:18	Unmuted
+2       	8       	Rising Tension Bake Xmas_CYMBALS_Howe.wav.new.02-13	   00:46:50:07	   00:46:56:00	   00:00:05:18	Unmuted
+2       	9       	Rising Tension Bake Xmas_CYMBALS_Howe.wav.new.02-17	   00:55:16:13	   00:55:22:07	   00:00:05:18	Unmuted
+
+
+TRACK NAME:	MX FX b3 (Stereo)
+COMMENTS:	
+USER DELAY:	0 Samples
+STATE: 
+CHANNEL 	EVENT   	CLIP NAME                     	START TIME    	END TIME      	DURATION      	STATE
+1       	1       	Elefat107_Trk8_Cymbal_H_Sam_Music-06.L	   00:02:14:17	   00:02:26:17	   00:00:12:00	Unmuted
+
+
+2       	1       	Elefat107_Trk8_Cymbal_H_Sam_Music-06.R	   00:02:14:17	   00:02:26:17	   00:00:12:00	Unmuted
+
+
+TRACK NAME:	MX FX b4 (Stereo)
+COMMENTS:	
+USER DELAY:	0 Samples
+STATE: 
+CHANNEL 	EVENT   	CLIP NAME                     	START TIME    	END TIME      	DURATION      	STATE
+1       	1       	GBBO Flurry Bake EXTENDED v4.05_Harpsichord_TH.wav.new.01	   00:01:50:07	   00:02:10:20	   00:00:20:13	Unmuted
+1       	2       	Orchestral Winners and Losers 02_BRASS_Howe.wav.new.01	   00:03:01:24	   00:03:17:24	   00:00:16:00	Unmuted
+
+
+2       	1       	GBBO Flurry Bake EXTENDED v4.05_Harpsichord_TH.wav.new.01-02	   00:01:50:07	   00:02:10:20	   00:00:20:13	Unmuted
+2       	2       	Orchestral Winners and Losers 02_BRASS_Howe.wav.new.01-02	   00:03:01:24	   00:03:17:24	   00:00:16:00	Unmuted
+
+
+TRACK NAME:	MX FX b5 (Stereo)
+COMMENTS:	
+USER DELAY:	0 Samples
+STATE: 
+CHANNEL 	EVENT   	CLIP NAME                     	START TIME    	END TIME      	DURATION      	STATE
+1       	1       	GBBO Flurry Bake EXTENDED v4.05_Lo WW_TH.wav.new.01	   00:01:50:07	   00:02:10:20	   00:00:20:13	Unmuted
+1       	2       	Orchestral Winners and Losers 01_STRINGS_Howe.wav.new.01	   00:03:09:23	   00:03:17:24	   00:00:08:01	Unmuted
+
+
+2       	1       	GBBO Flurry Bake EXTENDED v4.05_Lo WW_TH.wav.new.01-02	   00:01:50:07	   00:02:10:20	   00:00:20:13	Unmuted
+2       	2       	Orchestral Winners and Losers 01_STRINGS_Howe.wav.new.01-01	   00:03:09:23	   00:03:17:24	   00:00:08:01	Unmuted
+
+
+TRACK NAME:	MX FX b6 (Stereo)
+COMMENTS:	
+USER DELAY:	0 Samples
+STATE: 
+CHANNEL 	EVENT   	CLIP NAME                     	START TIME    	END TIME      	DURATION      	STATE
+1       	1       	GBBO Flurry Bake EXTENDED v4.05_Hi Perc Pulse_TH.wav.new.01	   00:01:50:07	   00:01:56:14	   00:00:06:07	Unmuted
+1       	2       	GBBO Flurry Bake EXTENDED v4.05_Hi WW_TH.wav.new.02-08	   00:02:08:22	   00:02:11:07	   00:00:02:10	Unmuted
+
+
+2       	1       	GBBO Flurry Bake EXTENDED v4.05_Hi Perc Pulse_TH.wav.new.01-01	   00:01:50:07	   00:01:56:14	   00:00:06:07	Unmuted
+2       	2       	GBBO Flurry Bake EXTENDED v4.05_Hi WW_TH.wav.new.02-09	   00:02:08:22	   00:02:11:07	   00:00:02:10	Unmuted
+
+
+TRACK NAME:	MX FX b7 (Stereo)
+COMMENTS:	
+USER DELAY:	0 Samples
+STATE: 
+CHANNEL 	EVENT   	CLIP NAME                     	START TIME    	END TIME      	DURATION      	STATE
+
+
+
+
+TRACK NAME:	MX FX b8 (Stereo)
+COMMENTS:	
+USER DELAY:	0 Samples
+STATE: 
+CHANNEL 	EVENT   	CLIP NAME                     	START TIME    	END TIME      	DURATION      	STATE
+
+
+
+
