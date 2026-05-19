@@ -1,0 +1,196 @@
+#!/usr/bin/env python3
+"""
+ptx_clips.py — reconstruct track → clip → audio-file relationships from a
+decoded (un-xored) Pro Tools session.
+
+Ports the relevant block-walking logic from zamaudio/ptformat. ptformat's
+own version gate rejects PT 13+, but the block *structure* is unchanged —
+only the content-type codes shift (this build uses the 0x262a/0x2629 region
+codes and the 0x1054/0x1052/0x1050/0x104f region->track map, all of which
+ptformat already recognises as alternates).
+
+Chain:
+  WAV list   0x1004 -> 0x103a            : indexed audio filenames
+  Regions    0x262a -> 0x2629            : region name + 3-point + WAV findex
+  Map        0x1054 -> 0x1052 -> 0x1050  : per-track region entries
+                       -> 0x104f         : region rawindex + timeline start
+"""
+from __future__ import annotations
+import struct
+from ptblocks import parseblocks
+
+
+def _u(data, pos, n):
+    """little-endian unsigned read of n bytes"""
+    if pos + n > len(data):
+        return 0
+    return int.from_bytes(data[pos:pos+n], "little")
+
+
+def _rstr(data, pos):
+    """PT length-prefixed string (4-byte LE length + bytes)"""
+    if pos + 4 > len(data):
+        return ""
+    n = struct.unpack_from("<I", data, pos)[0]
+    if n > 4096 or pos + 4 + n > len(data):
+        return ""
+    return data[pos+4:pos+4+n].decode("latin-1", "replace")
+
+
+def _walk(node, ct):
+    if node["content_type"] == ct:
+        yield node
+    for c in node["children"]:
+        yield from _walk(c, ct)
+
+
+def _parse_three_point(data, j):
+    """Returns (start, offset, length) in samples. Little-endian layout."""
+    offsetbytes = (data[j+1] & 0xf0) >> 4
+    lengthbytes = (data[j+2] & 0xf0) >> 4
+    startbytes  = (data[j+3] & 0xf0) >> 4
+    offset = _u(data, j+5, offsetbytes) if 1 <= offsetbytes <= 5 else 0
+    j += offsetbytes
+    length = _u(data, j+5, lengthbytes) if 1 <= lengthbytes <= 5 else 0
+    j += lengthbytes
+    start = _u(data, j+5, startbytes) if 1 <= startbytes <= 5 else 0
+    return start, offset, length
+
+
+def extract_clips(decoded: bytes) -> dict:
+    """Build the track -> clips mapping. Returns a dict with:
+        wav_files:  [filename, ...]                       (indexed)
+        regions:    [{name, file, file_index, start,      (indexed)
+                      offset, length}, ...]
+        tracks:     {track_name: [clip, ...]}  where clip =
+                      {clip_name, file, start_samples,
+                       length_samples, region_index}
+    """
+    blocks, _ = parseblocks(decoded)
+
+    def all_of(ct):
+        for b in blocks:
+            yield from _walk(b, ct)
+
+    # --- 1) WAV file list (0x1004 -> 0x103a) ---
+    wav_files: list[str] = []
+    for wlb in all_of(0x1004):
+        nwavs = _u(decoded, wlb["offset"] + 2, 4)
+        for c in wlb["children"]:
+            if c["content_type"] != 0x103a:
+                continue
+            pos = c["offset"] + 11
+            end = c["offset"] + c["block_size"]
+            count = 0
+            while pos < end and count < nwavs + 16:
+                nm = _rstr(decoded, pos)
+                if not nm:
+                    break
+                pos += len(nm) + 4
+                wavtype = decoded[pos:pos+4].decode("latin-1", "replace")
+                pos += 9
+                count += 1
+                # ptformat skips these pseudo-entries
+                if ".grp" in nm or nm in ("Audio Files", "Fade Files"):
+                    continue
+                if wavtype and not any(t in wavtype for t in ("WAVE", "EVAW", "AIFF", "FFIA")):
+                    if not (".wav" in nm.lower() or ".aif" in nm.lower() or ".mp3" in nm.lower()):
+                        continue
+                wav_files.append(nm)
+        break
+
+    # --- 2) Region list (0x262a -> 0x2629) ---
+    regions: list[dict] = []
+    for rlb in all_of(0x262a):
+        for c in rlb["children"]:
+            if c["content_type"] != 0x2629:
+                continue
+            j = c["offset"] + 11
+            rname = _rstr(decoded, j)
+            j += len(rname) + 4
+            start, offset, length = _parse_three_point(decoded, j)
+            findex = None
+            if c["children"]:
+                d = c["children"][0]
+                findex = _u(decoded, d["offset"] + d["block_size"], 4)
+            fname = wav_files[findex] if (findex is not None and findex < len(wav_files)) else None
+            regions.append({
+                "name": rname,
+                "file_index": findex,
+                "file": fname,
+                "start": start,
+                "offset": offset,
+                "length": length,
+            })
+
+    # --- 3) Region -> track map (0x1052 -> 0x1050 -> 0x104f) ---
+    # 0x1052 entries usually sit under 0x1054, but scan for them directly
+    # so we don't miss any that are nested elsewhere.
+    tracks: dict[str, list[dict]] = {}
+    for entry in all_of(0x1052):
+        tname = _rstr(decoded, entry["offset"] + 2)
+        if not tname:
+            continue
+        clips = tracks.setdefault(tname, [])
+        for r1050 in entry["children"]:
+            if r1050["content_type"] != 0x1050:
+                continue
+            # byte at offset+46 marks a fade region in ptformat
+            is_fade = (r1050["offset"] + 46 < len(decoded)
+                       and decoded[r1050["offset"] + 46] == 0x01)
+            if is_fade:
+                continue
+            for sub in r1050["children"]:
+                if sub["content_type"] != 0x104f:
+                    continue
+                j = sub["offset"] + 4
+                rawindex = _u(decoded, j, 4)
+                j += 4 + 1
+                start = _u(decoded, j, 4)
+                reg = regions[rawindex] if rawindex < len(regions) else None
+                clips.append({
+                    "clip_name": reg["name"] if reg else f"(region {rawindex})",
+                    "file": reg["file"] if reg else None,
+                    "region_index": rawindex,
+                    "start_samples": start,
+                    "length_samples": reg["length"] if reg else 0,
+                    "offset_samples": reg["offset"] if reg else 0,
+                })
+
+    # drop tracks with no clips, keep stable order
+    tracks = {k: v for k, v in tracks.items() if v}
+
+    return {
+        "wav_files": wav_files,
+        "regions": regions,
+        "tracks": tracks,
+    }
+
+
+if __name__ == "__main__":
+    import sys, json
+    data = open(sys.argv[1], "rb").read()
+    result = extract_clips(data)
+    print(f"WAV files : {len(result['wav_files'])}")
+    print(f"regions   : {len(result['regions'])}")
+    print(f"tracks w/ clips: {len(result['tracks'])}")
+    print()
+    # show a few tracks with their clips
+    shown = 0
+    for tname, clips in result["tracks"].items():
+        if shown >= 6:
+            break
+        if not clips:
+            continue
+        print(f"TRACK: {tname}  ({len(clips)} clips)")
+        for clip in clips[:4]:
+            sr = 48000
+            start_s = clip["start_samples"] / sr
+            len_s = clip["length_samples"] / sr
+            print(f"    {clip['clip_name'][:60]:<60}")
+            print(f"        file={clip['file']}")
+            print(f"        start={start_s:.2f}s  length={len_s:.2f}s")
+        if len(clips) > 4:
+            print(f"    ... +{len(clips)-4} more")
+        print()
+        shown += 1

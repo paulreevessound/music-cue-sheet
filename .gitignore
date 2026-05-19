@@ -1,0 +1,32 @@
+# Pro Tools session files (client data)
+*.ptx
+*.ptf
+
+# Pro Tools text exports (client data)
+*.txt
+
+# Generated cue sheets (client deliverables)
+*_cuesheet.csv
+*_cuesheet.pdf
+* Cuesheet.csv
+* Cuesheet.pdf
+
+# Intermediate / extracted session data
+*.cuesheet-tmp.txt
+mx_cuesheet.json
+*_session.json
+*_session_report.html
+
+# Test artifacts
+fake_session*
+
+# macOS / Python
+.DS_Store
+__pycache__/
+*.pyc
+
+# Binaries
+ptunxor
+
+# Screenshots
+Screenshot*.png
