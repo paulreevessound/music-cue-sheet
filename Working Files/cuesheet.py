@@ -1,3 +1,13 @@
+"""
+cuesheet.py — Pro Tools text export → CSV + branded PDF.
+
+CLI:
+    python3 cuesheet.py <path-to-protools-export.txt>
+
+Importable:
+    import cuesheet
+    csv_path, pdf_path = cuesheet.main("/path/to/session.txt")
+"""
 import csv
 import os
 import re
@@ -8,18 +18,6 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import mm
 from reportlab.lib import colors
 
-if len(sys.argv) < 2:
-    print("Usage: python3 cuesheet.py <path-to-protools-export.txt>")
-    sys.exit(1)
-
-input_file = sys.argv[1]
-
-input_dir = os.path.dirname(input_file)
-input_name = os.path.basename(input_file)
-base_name = os.path.splitext(input_name)[0]
-output_file = os.path.join(input_dir, f"{base_name}_cuesheet.csv")
-pdf_output = os.path.join(input_dir, f"{base_name}_cuesheet.pdf")
-logo_path = os.path.join(input_dir, 'logo.png')
 
 HEADER_LABELS = [
     'SESSION NAME:',
@@ -29,12 +27,9 @@ HEADER_LABELS = [
     'TIMECODE FORMAT:',
 ]
 
-MERGE_GAP_FRAMES = 125
-PREFIX_THRESHOLD = 8
-PREFIX_THRESHOLD_AT_BOUNDARY = 15
-
-clips = []
-session_info = {}
+MERGE_GAP_FRAMES = 125              # 5 seconds at 25fps
+PREFIX_THRESHOLD = 8                # min common-prefix length for stem grouping
+PREFIX_THRESHOLD_AT_BOUNDARY = 15   # stricter when prefix ends at word boundary
 
 
 def clean_name(name):
@@ -79,7 +74,10 @@ def cleanup_display_name(prefix):
     return prefix.rstrip(' _')
 
 
-def read_file():
+def read_file(input_file):
+    """Parse a Pro Tools text export, returning (clips, session_info)."""
+    clips = []
+    session_info = {}
     with open(input_file, 'r', encoding='UTF-8') as f:
         for line in f:
             if not line.strip():
@@ -104,7 +102,7 @@ def read_file():
             if start == end:
                 continue
             clips.append((name, start, end, duration))
-    print(f"Parsed {len(clips)} clips")
+    return clips, session_info
 
 
 def write_pdf(clips, output_path, session_info, logo_path):
@@ -176,65 +174,90 @@ def write_pdf(clips, output_path, session_info, logo_path):
     doc.build([header_strip, Spacer(1, 6*mm), info_table, Spacer(1, 8*mm), cue_table], onFirstPage=draw_footer, onLaterPages=draw_footer)
 
 
-read_file()
-clips.sort(key=lambda c: c[1])
+def main(input_file):
+    """Run the full pipeline. Returns (csv_path, pdf_path)."""
+    input_dir = os.path.dirname(input_file)
+    input_name = os.path.basename(input_file)
+    base_name = os.path.splitext(input_name)[0]
+    output_file = os.path.join(input_dir, f"{base_name}_cuesheet.csv")
+    pdf_output = os.path.join(input_dir, f"{base_name}_cuesheet.pdf")
+    logo_path = os.path.join(input_dir, 'logo.png')
 
-seen = set()
-unique_clips = []
-for clip in clips:
-    name, start, end, duration = clip
-    key = (name, start, end)
-    if key in seen:
-        continue
-    seen.add(key)
-    unique_clips.append(clip)
-clips = unique_clips
+    clips, session_info = read_file(input_file)
+    print(f"Parsed {len(clips)} clips")
 
-with open(output_file, 'w', encoding='UTF-8', newline='') as f:
-    writer = csv.writer(f)
-    for label in HEADER_LABELS:
-        writer.writerow([label, session_info.get(label, '')])
-    writer.writerow([])
-    writer.writerow(['No.', 'Name', 'Timecode In', 'Timecode Out', 'Duration'])
-    for i, clip in enumerate(clips, start=1):
+    # Sort by start TC
+    clips.sort(key=lambda c: c[1])
+
+    # Dedupe identical (name, start, end) — collapses stereo L/R pairs
+    seen = set()
+    unique_clips = []
+    for clip in clips:
         name, start, end, duration = clip
-        writer.writerow([i, name, start, end, duration])
-print(f"Wrote {output_file} ({len(clips)} cues)")
-
-merged_clips = []
-for clip in clips:
-    name, start, end, duration = clip
-    if merged_clips:
-        prev_name, prev_start, prev_end, _ = merged_clips[-1]
-        if name == prev_name and tc_to_frames(start) - tc_to_frames(prev_end) <= MERGE_GAP_FRAMES:
-            new_duration = frames_to_tc(tc_to_frames(end) - tc_to_frames(prev_start))
-            merged_clips[-1] = (name, prev_start, end, new_duration)
+        key = (name, start, end)
+        if key in seen:
             continue
-    merged_clips.append(clip)
-clips = merged_clips
+        seen.add(key)
+        unique_clips.append(clip)
+    clips = unique_clips
 
-grouped_clips = []
-i = 0
-while i < len(clips):
-    name, start, end, duration = clips[i]
-    group_end = end
-    group_prefix = name
-    j = i + 1
-    while j < len(clips):
-        next_name, next_start, next_end, _ = clips[j]
-        prefix = common_prefix(group_prefix, next_name)
-        min_prefix = PREFIX_THRESHOLD_AT_BOUNDARY if (prefix.endswith('_') or prefix.endswith(' ')) else PREFIX_THRESHOLD
-        if len(prefix) >= min_prefix and overlaps_or_within(start, group_end, next_start, next_end, MERGE_GAP_FRAMES):
-            group_prefix = prefix
-            if tc_to_frames(next_end) > tc_to_frames(group_end):
-                group_end = next_end
-            j += 1
-        else:
-            break
-    merged_duration = frames_to_tc(tc_to_frames(group_end) - tc_to_frames(start))
-    grouped_clips.append((cleanup_display_name(group_prefix), start, group_end, merged_duration))
-    i = j
-clips = grouped_clips
+    # Write CSV (raw deduped data, audit trail)
+    with open(output_file, 'w', encoding='UTF-8', newline='') as f:
+        writer = csv.writer(f)
+        for label in HEADER_LABELS:
+            writer.writerow([label, session_info.get(label, '')])
+        writer.writerow([])
+        writer.writerow(['No.', 'Name', 'Timecode In', 'Timecode Out', 'Duration'])
+        for i, clip in enumerate(clips, start=1):
+            name, start, end, duration = clip
+            writer.writerow([i, name, start, end, duration])
+    print(f"Wrote {output_file} ({len(clips)} cues)")
 
-write_pdf(clips, pdf_output, session_info, logo_path)
-print(f"Wrote {pdf_output} ({len(clips)} cues after merging/grouping)")
+    # Merge adjacent same-name clips within 5-second gap
+    merged_clips = []
+    for clip in clips:
+        name, start, end, duration = clip
+        if merged_clips:
+            prev_name, prev_start, prev_end, _ = merged_clips[-1]
+            if name == prev_name and tc_to_frames(start) - tc_to_frames(prev_end) <= MERGE_GAP_FRAMES:
+                new_duration = frames_to_tc(tc_to_frames(end) - tc_to_frames(prev_start))
+                merged_clips[-1] = (name, prev_start, end, new_duration)
+                continue
+        merged_clips.append(clip)
+    clips = merged_clips
+
+    # Group stems with common prefix that overlap or are within gap
+    grouped_clips = []
+    i = 0
+    while i < len(clips):
+        name, start, end, duration = clips[i]
+        group_end = end
+        group_prefix = name
+        j = i + 1
+        while j < len(clips):
+            next_name, next_start, next_end, _ = clips[j]
+            prefix = common_prefix(group_prefix, next_name)
+            min_prefix = PREFIX_THRESHOLD_AT_BOUNDARY if (prefix.endswith('_') or prefix.endswith(' ')) else PREFIX_THRESHOLD
+            if len(prefix) >= min_prefix and overlaps_or_within(start, group_end, next_start, next_end, MERGE_GAP_FRAMES):
+                group_prefix = prefix
+                if tc_to_frames(next_end) > tc_to_frames(group_end):
+                    group_end = next_end
+                j += 1
+            else:
+                break
+        merged_duration = frames_to_tc(tc_to_frames(group_end) - tc_to_frames(start))
+        grouped_clips.append((cleanup_display_name(group_prefix), start, group_end, merged_duration))
+        i = j
+    clips = grouped_clips
+
+    write_pdf(clips, pdf_output, session_info, logo_path)
+    print(f"Wrote {pdf_output} ({len(clips)} cues after merging/grouping)")
+
+    return output_file, pdf_output
+
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print("Usage: python3 cuesheet.py <path-to-protools-export.txt>")
+        sys.exit(1)
+    main(sys.argv[1])
