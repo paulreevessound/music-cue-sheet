@@ -181,7 +181,16 @@ def main(input_file):
     base_name = os.path.splitext(input_name)[0]
     output_file = os.path.join(input_dir, f"{base_name}_cuesheet.csv")
     pdf_output = os.path.join(input_dir, f"{base_name}_cuesheet.pdf")
+
+    # Look for logo.png next to the input file first; fall back to bundle/script dir
     logo_path = os.path.join(input_dir, 'logo.png')
+    if not os.path.exists(logo_path):
+        if getattr(sys, 'frozen', False):
+            bundled = os.path.join(sys._MEIPASS, 'logo.png')
+        else:
+            bundled = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logo.png')
+        if os.path.exists(bundled):
+            logo_path = bundled
 
     clips, session_info = read_file(input_file)
     print(f"Parsed {len(clips)} clips")
