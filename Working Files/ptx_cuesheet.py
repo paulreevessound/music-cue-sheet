@@ -66,7 +66,8 @@ except ImportError as e:
 TEMPLATE_PATH = HERE / "report_template.html"
 
 
-# Injected JS overrides the sel-export button to POST selected tracks.
+# Injected JS adds a merge-gap slider and overrides the sel-export button
+# to POST selected tracks + gap setting.
 INJECTED_SCRIPT = """
 <script>
 (function() {
@@ -74,6 +75,57 @@ INJECTED_SCRIPT = """
     const btn = document.getElementById('sel-export');
     if (!btn) return;
 
+    // ── Build the slider UI ──────────────────────────────────────
+    const wrap = document.createElement('div');
+    wrap.id = 'merge-gap-wrap';
+    wrap.style.cssText = (
+      'display: flex; align-items: center; gap: 12px; ' +
+      'padding: 10px 14px; margin: 12px 0; ' +
+      'border: 1px solid rgba(127,127,127,0.25); ' +
+      'border-radius: 8px; ' +
+      'font-family: inherit; font-size: 13px;'
+    );
+
+    const label = document.createElement('label');
+    label.htmlFor = 'merge-gap-slider';
+    label.textContent = 'Merge gap';
+    label.style.cssText = 'font-weight: 600; min-width: 80px;';
+
+    const slider = document.createElement('input');
+    slider.type = 'range';
+    slider.id = 'merge-gap-slider';
+    slider.min = '0';
+    slider.max = '30';
+    slider.step = '1';
+    slider.value = '5';
+    slider.style.cssText = 'flex: 1; accent-color: #1a1a1a;';
+
+    const value = document.createElement('span');
+    value.id = 'merge-gap-value';
+    value.textContent = '5s';
+    value.style.cssText = (
+      'min-width: 44px; text-align: right; ' +
+      'font-variant-numeric: tabular-nums; font-weight: 600;'
+    );
+
+    const help = document.createElement('span');
+    help.textContent = 'consolidates adjacent clips';
+    help.style.cssText = 'opacity: 0.55; font-size: 11px; margin-left: 4px;';
+
+    slider.addEventListener('input', () => {
+      value.textContent = slider.value + 's';
+    });
+
+    wrap.appendChild(label);
+    wrap.appendChild(slider);
+    wrap.appendChild(value);
+    wrap.appendChild(help);
+
+    // Place the slider right above the export button's row
+    const host = btn.parentNode;
+    host.parentNode.insertBefore(wrap, host);
+
+    // ── Replace the export button's click handler ────────────────
     const clone = btn.cloneNode(true);
     btn.parentNode.replaceChild(clone, btn);
 
@@ -91,6 +143,9 @@ INJECTED_SCRIPT = """
         alert('No tracks selected. Tick the tracks you want in the cue sheet.');
         return;
       }
+
+      const mergeGap = parseInt(slider.value, 10);
+
       clone.disabled = true;
       const originalText = clone.textContent;
       clone.textContent = 'Generating…';
@@ -99,7 +154,7 @@ INJECTED_SCRIPT = """
         const res = await fetch('/generate', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({tracks: selected}),
+          body: JSON.stringify({tracks: selected, merge_gap_seconds: mergeGap}),
         });
         const data = await res.json();
         if (data.ok) {
@@ -157,7 +212,13 @@ class CueSheetHandler(http.server.BaseHTTPRequestHandler):
             length = int(self.headers.get('Content-Length', 0))
             payload = json.loads(self.rfile.read(length))
             selected = payload.get('tracks', [])
-            result = self._generate(selected)
+            # merge_gap_seconds: 0-30. Default 5s if missing. Clamped.
+            try:
+                gap_seconds = int(payload.get('merge_gap_seconds', 5))
+            except (TypeError, ValueError):
+                gap_seconds = 5
+            gap_seconds = max(0, min(30, gap_seconds))
+            result = self._generate(selected, gap_seconds)
 
             body = json.dumps(result).encode('utf-8')
             self.send_response(200 if result['ok'] else 500)
@@ -180,11 +241,13 @@ class CueSheetHandler(http.server.BaseHTTPRequestHandler):
             except Exception:
                 pass
 
-    def _generate(self, selected_names: list[str]) -> dict:
+    def _generate(self, selected_names: list[str], gap_seconds: int = 5) -> dict:
         ptx = self.ptx_path
         base = ptx.stem
         work_dir = ptx.parent
         intermediate_txt = work_dir / f"{base}.cuesheet-tmp.txt"
+        # 25fps → frames per second
+        merge_gap_frames = gap_seconds * 25
 
         try:
             n_clips = write_pt_text_from_session(
@@ -194,7 +257,10 @@ class CueSheetHandler(http.server.BaseHTTPRequestHandler):
                 return {'ok': False, 'error': 'No clips found on the selected tracks.'}
 
             # In-process call: works whether script or bundled.
-            csv_src, pdf_src = cuesheet.main(str(intermediate_txt))
+            csv_src, pdf_src = cuesheet.main(
+                str(intermediate_txt),
+                merge_gap_frames=merge_gap_frames,
+            )
             csv_src = Path(csv_src)
             pdf_src = Path(pdf_src)
 
