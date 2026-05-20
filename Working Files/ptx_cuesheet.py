@@ -390,8 +390,11 @@ INJECTED_SCRIPT = """
       }
     }
 
-    // Re-render whenever any checkbox state changes or range inputs change
-    document.addEventListener('change', renderTimeline, true);
+    // Re-render whenever any checkbox state changes or range inputs change.
+    // Use bubble phase + rAF so we run AFTER the template's own change
+    // handlers have propagated state to child checkboxes.
+    document.addEventListener('change', () => requestAnimationFrame(renderTimeline));
+    document.addEventListener('click', () => requestAnimationFrame(renderTimeline));
     fromIn.addEventListener('input', renderTimeline);
     toIn.addEventListener('input', renderTimeline);
     renderTimeline();
