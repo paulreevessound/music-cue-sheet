@@ -21,6 +21,7 @@ Requires Python 3.10+ when run as a script.
 from __future__ import annotations
 import http.server
 import json
+import re
 import socket
 import sys
 import threading
@@ -66,79 +67,342 @@ except ImportError as e:
 TEMPLATE_PATH = HERE / "report_template.html"
 
 
-# Injected JS adds a merge-gap slider and overrides the sel-export button
-# to POST selected tracks + gap setting.
+# Injected JS adds:
+#   1) A timeline panel showing clips on selected tracks (updates live)
+#   2) Time range inputs (HH:MM:SS:FF format) to slice the cue sheet
+#   3) A merge-gap slider (default 5s, 0-30)
+#   4) Overrides the sel-export button to POST tracks + gap + time range
+#
+# Session clip data is embedded as JSON in <script id="ms-session-data">.
 INJECTED_SCRIPT = """
 <script>
 (function() {
+  // ─── Family → colour map ─────────────────────────────────────
+  const COLOR_MAP = {
+    'MX': '#fbbf24', 'MUSIC': '#fbbf24', 'M': '#fbbf24', 'MUS': '#fbbf24',
+    'NAR': '#60a5fa', 'NARR': '#60a5fa', 'VO': '#60a5fa', 'VOICE': '#60a5fa',
+    'DX': '#a78bfa', 'DIALOG': '#a78bfa', 'DIALOGUE': '#a78bfa',
+    'FX': '#f87171', 'SFX': '#f87171',
+    'FOLEY': '#fb923c', 'BG': '#fb923c', 'AMB': '#fb923c',
+    'OPT': '#34d399', 'OPTIONAL': '#34d399',
+  };
+  function colourFor(family) {
+    const key = (family || '').toUpperCase().split(/[\\s_]/)[0];
+    return COLOR_MAP[key] || '#9ca3af';
+  }
+
+  // ─── Timecode helpers (25fps) ────────────────────────────────
+  const FPS = 25;
+  function tcToFrames(tc) {
+    const m = /^(\\d{1,2}):(\\d{1,2}):(\\d{1,2}):(\\d{1,2})$/.exec((tc||'').trim());
+    if (!m) return null;
+    const h=+m[1], mi=+m[2], s=+m[3], f=+m[4];
+    if (mi>59 || s>59 || f>=FPS) return null;
+    return h*90000 + mi*1500 + s*FPS + f;
+  }
+  function framesToTc(frames) {
+    const h = Math.floor(frames/90000); frames %= 90000;
+    const mi = Math.floor(frames/1500); frames %= 1500;
+    const s = Math.floor(frames/FPS);
+    const f = frames % FPS;
+    const p = n => String(n).padStart(2,'0');
+    return `${p(h)}:${p(mi)}:${p(s)}:${p(f)}`;
+  }
+
   function init() {
     const btn = document.getElementById('sel-export');
     if (!btn) return;
 
-    // ── Build the slider UI ──────────────────────────────────────
-    const wrap = document.createElement('div');
-    wrap.id = 'merge-gap-wrap';
-    wrap.style.cssText = (
-      'display: flex; align-items: center; gap: 12px; ' +
-      'padding: 10px 14px; margin: 12px 0; ' +
+    // ─── Parse the embedded session data ───────────────────────
+    let session = null;
+    try {
+      const dataEl = document.getElementById('ms-session-data');
+      if (dataEl) session = JSON.parse(dataEl.textContent);
+    } catch (e) {
+      console.warn('No session data for timeline:', e);
+    }
+
+    let maxSample = 0;
+    let samplesPerFrame = 1920; // 48k/25
+    if (session) {
+      samplesPerFrame = session.sample_rate / FPS;
+      for (const t of session.tracks) {
+        for (const c of t.clips) {
+          const end = c.s + c.l;
+          if (end > maxSample) maxSample = end;
+        }
+      }
+    }
+    const samplesToFrames = sam => Math.floor(sam / samplesPerFrame);
+
+    // ─── Container panel ───────────────────────────────────────
+    const panel = document.createElement('div');
+    panel.id = 'ms-panel';
+    panel.style.cssText = (
+      'margin: 16px 0; padding: 14px 16px; ' +
       'border: 1px solid rgba(127,127,127,0.25); ' +
-      'border-radius: 8px; ' +
-      'font-family: inherit; font-size: 13px;'
+      'border-radius: 10px; font-family: inherit; font-size: 13px;'
     );
 
-    const label = document.createElement('label');
-    label.htmlFor = 'merge-gap-slider';
-    label.textContent = 'Merge gap';
-    label.style.cssText = 'font-weight: 600; min-width: 80px;';
+    // ─── Time range row ───────────────────────────────────────
+    const rangeRow = document.createElement('div');
+    rangeRow.style.cssText = 'display: flex; align-items: center; gap: 10px; flex-wrap: wrap;';
+
+    const rangeLabel = document.createElement('span');
+    rangeLabel.textContent = 'Time range';
+    rangeLabel.style.cssText = 'font-weight: 600; min-width: 80px;';
+
+    function makeTcInput(placeholder) {
+      const i = document.createElement('input');
+      i.type = 'text';
+      i.placeholder = placeholder;
+      i.pattern = '\\\\d{1,2}:\\\\d{2}:\\\\d{2}:\\\\d{2}';
+      i.style.cssText = (
+        'width: 110px; padding: 6px 8px; ' +
+        'font-family: ui-monospace, Menlo, Consolas, monospace; ' +
+        'font-size: 13px; ' +
+        'border: 1px solid rgba(127,127,127,0.4); ' +
+        'border-radius: 6px; background: transparent; color: inherit;'
+      );
+      return i;
+    }
+    const fromIn = makeTcInput('00:00:00:00');
+    const toIn = makeTcInput(maxSample ? framesToTc(samplesToFrames(maxSample)) : '00:00:00:00');
+    fromIn.id = 'ms-range-from';
+    toIn.id = 'ms-range-to';
+
+    const clearBtn = document.createElement('button');
+    clearBtn.type = 'button';
+    clearBtn.textContent = 'Clear';
+    clearBtn.style.cssText = (
+      'padding: 6px 12px; font-size: 12px; ' +
+      'border: 1px solid rgba(127,127,127,0.4); ' +
+      'border-radius: 6px; background: transparent; color: inherit; cursor: pointer;'
+    );
+    clearBtn.addEventListener('click', () => {
+      fromIn.value = '';
+      toIn.value = '';
+      renderTimeline();
+    });
+
+    const fullLabel = document.createElement('span');
+    fullLabel.textContent = (
+      maxSample
+        ? `(session: 00:00:00:00 — ${framesToTc(samplesToFrames(maxSample))})`
+        : ''
+    );
+    fullLabel.style.cssText = 'opacity: 0.55; font-size: 11px; margin-left: 4px;';
+
+    rangeRow.appendChild(rangeLabel);
+    rangeRow.appendChild(fromIn);
+    const sep = document.createElement('span'); sep.textContent = '→'; sep.style.opacity='0.6';
+    rangeRow.appendChild(sep);
+    rangeRow.appendChild(toIn);
+    rangeRow.appendChild(clearBtn);
+    rangeRow.appendChild(fullLabel);
+    panel.appendChild(rangeRow);
+
+    // ─── Timeline SVG ──────────────────────────────────────────
+    const svgWrap = document.createElement('div');
+    svgWrap.style.cssText = (
+      'margin-top: 12px; padding: 8px; ' +
+      'background: rgba(127,127,127,0.06); ' +
+      'border-radius: 6px; overflow-x: auto;'
+    );
+    const svgNs = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(svgNs, 'svg');
+    svg.setAttribute('width', '100%');
+    svg.style.cssText = 'display: block;';
+    svgWrap.appendChild(svg);
+    panel.appendChild(svgWrap);
+
+    const emptyMsg = document.createElement('div');
+    emptyMsg.textContent = 'Tick tracks above to preview them on the timeline.';
+    emptyMsg.style.cssText = 'padding: 24px; text-align: center; opacity: 0.5;';
+    svgWrap.appendChild(emptyMsg);
+
+    // ─── Merge-gap row ─────────────────────────────────────────
+    const gapRow = document.createElement('div');
+    gapRow.style.cssText = (
+      'display: flex; align-items: center; gap: 12px; ' +
+      'margin-top: 12px; padding-top: 12px; ' +
+      'border-top: 1px solid rgba(127,127,127,0.15);'
+    );
+
+    const gapLabel = document.createElement('span');
+    gapLabel.textContent = 'Merge gap';
+    gapLabel.style.cssText = 'font-weight: 600; min-width: 80px;';
 
     const slider = document.createElement('input');
     slider.type = 'range';
     slider.id = 'merge-gap-slider';
-    slider.min = '0';
-    slider.max = '30';
-    slider.step = '1';
-    slider.value = '5';
+    slider.min = '0'; slider.max = '30'; slider.step = '1'; slider.value = '5';
     slider.style.cssText = 'flex: 1; accent-color: #1a1a1a;';
 
-    const value = document.createElement('span');
-    value.id = 'merge-gap-value';
-    value.textContent = '5s';
-    value.style.cssText = (
+    const gapValue = document.createElement('span');
+    gapValue.id = 'merge-gap-value';
+    gapValue.textContent = '5s';
+    gapValue.style.cssText = (
       'min-width: 44px; text-align: right; ' +
       'font-variant-numeric: tabular-nums; font-weight: 600;'
     );
 
-    const help = document.createElement('span');
-    help.textContent = 'consolidates adjacent clips';
-    help.style.cssText = 'opacity: 0.55; font-size: 11px; margin-left: 4px;';
+    const gapHelp = document.createElement('span');
+    gapHelp.textContent = 'consolidates adjacent clips';
+    gapHelp.style.cssText = 'opacity: 0.55; font-size: 11px;';
 
-    slider.addEventListener('input', () => {
-      value.textContent = slider.value + 's';
-    });
+    slider.addEventListener('input', () => { gapValue.textContent = slider.value + 's'; });
+    gapRow.appendChild(gapLabel);
+    gapRow.appendChild(slider);
+    gapRow.appendChild(gapValue);
+    gapRow.appendChild(gapHelp);
+    panel.appendChild(gapRow);
 
-    wrap.appendChild(label);
-    wrap.appendChild(slider);
-    wrap.appendChild(value);
-    wrap.appendChild(help);
-
-    // Place the slider right above the export button's row
+    // ─── Insert the panel above the export button row ─────────
     const host = btn.parentNode;
-    host.parentNode.insertBefore(wrap, host);
+    host.parentNode.insertBefore(panel, host);
 
-    // ── Replace the export button's click handler ────────────────
+    // ─── Timeline renderer ─────────────────────────────────────
+    const SVG_HEIGHT_PER_ROW = 16;
+    const SVG_GAP = 3;
+    const TICKS_HEIGHT = 18;
+
+    function getSelectedTrackNames() {
+      const cboxes = document.querySelectorAll('input[type="checkbox"][aria-label^="Select "]');
+      const out = [];
+      for (const cb of cboxes) {
+        if (!cb.checked) continue;
+        if (cb.id === 'select-all') continue;
+        out.push(cb.getAttribute('aria-label').replace(/^Select /, ''));
+      }
+      return out;
+    }
+
+    function chooseTickIntervalSec(totalSec) {
+      const tgt = totalSec / 8;
+      const steps = [10, 30, 60, 120, 300, 600, 1800, 3600];
+      for (const s of steps) if (s >= tgt) return s;
+      return 3600;
+    }
+
+    function getRange() {
+      const fromFrames = tcToFrames(fromIn.value);
+      const toFrames = tcToFrames(toIn.value);
+      if (fromFrames == null && toFrames == null) return null;
+      if (fromFrames == null || toFrames == null) return null;
+      if (toFrames <= fromFrames) return null;
+      return {
+        startSamples: fromFrames * samplesPerFrame,
+        endSamples: toFrames * samplesPerFrame,
+      };
+    }
+
+    function renderTimeline() {
+      while (svg.firstChild) svg.removeChild(svg.firstChild);
+      const selected = getSelectedTrackNames();
+      if (!session || selected.length === 0 || maxSample === 0) {
+        svg.setAttribute('height', '0');
+        emptyMsg.style.display = '';
+        return;
+      }
+      emptyMsg.style.display = 'none';
+
+      // Width: SVG fills container; we use a virtual viewBox
+      const W = 1000;
+      const matched = session.tracks.filter(t => selected.includes(t.name));
+      const rows = matched.length;
+      const H = rows * (SVG_HEIGHT_PER_ROW + SVG_GAP) + TICKS_HEIGHT;
+      svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+      svg.setAttribute('height', H);
+      svg.setAttribute('preserveAspectRatio', 'none');
+
+      const range = getRange();
+
+      matched.forEach((t, i) => {
+        const y = i * (SVG_HEIGHT_PER_ROW + SVG_GAP);
+        const colour = colourFor(t.family || t.name);
+        // background lane
+        const lane = document.createElementNS(svgNs, 'rect');
+        lane.setAttribute('x', '0');
+        lane.setAttribute('y', y);
+        lane.setAttribute('width', W);
+        lane.setAttribute('height', SVG_HEIGHT_PER_ROW);
+        lane.setAttribute('fill', 'rgba(127,127,127,0.06)');
+        svg.appendChild(lane);
+        // clip rects
+        for (const c of t.clips) {
+          const x = (c.s / maxSample) * W;
+          const w = Math.max(1, (c.l / maxSample) * W);
+          // dim if outside range
+          let opacity = 1;
+          if (range) {
+            const cEnd = c.s + c.l;
+            const overlaps = !(cEnd <= range.startSamples || c.s >= range.endSamples);
+            opacity = overlaps ? 1 : 0.18;
+          }
+          const r = document.createElementNS(svgNs, 'rect');
+          r.setAttribute('x', x);
+          r.setAttribute('y', y + 1);
+          r.setAttribute('width', w);
+          r.setAttribute('height', SVG_HEIGHT_PER_ROW - 2);
+          r.setAttribute('fill', colour);
+          r.setAttribute('opacity', opacity);
+          svg.appendChild(r);
+        }
+      });
+
+      // Range overlay lines (vertical)
+      if (range) {
+        const fromX = (range.startSamples / maxSample) * W;
+        const toX = (range.endSamples / maxSample) * W;
+        for (const x of [fromX, toX]) {
+          const line = document.createElementNS(svgNs, 'line');
+          line.setAttribute('x1', x); line.setAttribute('x2', x);
+          line.setAttribute('y1', '0'); line.setAttribute('y2', H - TICKS_HEIGHT);
+          line.setAttribute('stroke', '#1a1a1a');
+          line.setAttribute('stroke-width', '1');
+          line.setAttribute('stroke-dasharray', '3 2');
+          svg.appendChild(line);
+        }
+      }
+
+      // Time ticks
+      const totalSec = maxSample / session.sample_rate;
+      const tickSec = chooseTickIntervalSec(totalSec);
+      const tickY = rows * (SVG_HEIGHT_PER_ROW + SVG_GAP);
+      for (let t = 0; t <= totalSec + 1e-6; t += tickSec) {
+        const x = (t / totalSec) * W;
+        const tk = document.createElementNS(svgNs, 'line');
+        tk.setAttribute('x1', x); tk.setAttribute('x2', x);
+        tk.setAttribute('y1', tickY); tk.setAttribute('y2', tickY + 4);
+        tk.setAttribute('stroke', 'currentColor'); tk.setAttribute('opacity', '0.4');
+        svg.appendChild(tk);
+        const tx = document.createElementNS(svgNs, 'text');
+        const frames = Math.round(t * FPS);
+        tx.setAttribute('x', x + 3);
+        tx.setAttribute('y', tickY + 13);
+        tx.setAttribute('font-size', '9');
+        tx.setAttribute('font-family', 'ui-monospace, monospace');
+        tx.setAttribute('fill', 'currentColor');
+        tx.setAttribute('opacity', '0.6');
+        tx.textContent = framesToTc(frames);
+        svg.appendChild(tx);
+      }
+    }
+
+    // Re-render whenever any checkbox state changes or range inputs change
+    document.addEventListener('change', renderTimeline, true);
+    fromIn.addEventListener('input', renderTimeline);
+    toIn.addEventListener('input', renderTimeline);
+    renderTimeline();
+
+    // ─── Replace the export button's click handler ─────────────
     const clone = btn.cloneNode(true);
     btn.parentNode.replaceChild(clone, btn);
 
     clone.addEventListener('click', async (e) => {
       e.preventDefault();
-      const cboxes = document.querySelectorAll('input[type="checkbox"][aria-label^="Select "]');
-      const selected = [];
-      for (const cb of cboxes) {
-        if (!cb.checked) continue;
-        if (cb.id === 'select-all') continue;
-        const name = cb.getAttribute('aria-label').replace(/^Select /, '');
-        selected.push(name);
-      }
+      const selected = getSelectedTrackNames();
       if (selected.length === 0) {
         alert('No tracks selected. Tick the tracks you want in the cue sheet.');
         return;
@@ -146,15 +410,41 @@ INJECTED_SCRIPT = """
 
       const mergeGap = parseInt(slider.value, 10);
 
+      // Validate optional time range
+      let rangeStart = null, rangeEnd = null;
+      const fromVal = fromIn.value.trim();
+      const toVal = toIn.value.trim();
+      if (fromVal || toVal) {
+        const f = tcToFrames(fromVal);
+        const t = tcToFrames(toVal);
+        if (f == null || t == null) {
+          alert('Time range must be in HH:MM:SS:FF format (e.g. 00:01:30:00).');
+          return;
+        }
+        if (t <= f) {
+          alert('End time must be after start time.');
+          return;
+        }
+        rangeStart = fromVal;
+        rangeEnd = toVal;
+      }
+
       clone.disabled = true;
       const originalText = clone.textContent;
       clone.textContent = 'Generating…';
+
+      const payload = {
+        tracks: selected,
+        merge_gap_seconds: mergeGap,
+      };
+      if (rangeStart) payload.range_start = rangeStart;
+      if (rangeEnd) payload.range_end = rangeEnd;
 
       try {
         const res = await fetch('/generate', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({tracks: selected, merge_gap_seconds: mergeGap}),
+          body: JSON.stringify(payload),
         });
         const data = await res.json();
         if (data.ok) {
@@ -180,6 +470,36 @@ INJECTED_SCRIPT = """
 })();
 </script>
 """
+
+
+def build_session_data_script(session: dict) -> str:
+    """Build a slim JSON blob with just enough for the timeline to render.
+
+    Embedded into the HTML as <script id="ms-session-data" type="application/json">.
+    """
+    # Build reverse map: track name → family
+    fam_lookup = {}
+    for fam, names in (session.get('track_families') or {}).items():
+        for n in names:
+            fam_lookup[n] = fam
+
+    payload = {
+        'sample_rate': session.get('sample_rate', 48000),
+        'tracks': [],
+    }
+    for tname, clips in (session.get('track_clips') or {}).items():
+        payload['tracks'].append({
+            'name': tname,
+            'family': fam_lookup.get(tname, ''),
+            'clips': [
+                {'s': c.get('start_samples', 0), 'l': c.get('length_samples', 0)}
+                for c in clips
+            ],
+        })
+
+    # Escape </script> in JSON to prevent breaking out of the script tag
+    blob = json.dumps(payload).replace('</', '<\\/')
+    return f'<script id="ms-session-data" type="application/json">{blob}</script>'
 
 
 class CueSheetHandler(http.server.BaseHTTPRequestHandler):
@@ -218,7 +538,10 @@ class CueSheetHandler(http.server.BaseHTTPRequestHandler):
             except (TypeError, ValueError):
                 gap_seconds = 5
             gap_seconds = max(0, min(30, gap_seconds))
-            result = self._generate(selected, gap_seconds)
+            # optional time range in HH:MM:SS:FF
+            range_start = payload.get('range_start')
+            range_end = payload.get('range_end')
+            result = self._generate(selected, gap_seconds, range_start, range_end)
 
             body = json.dumps(result).encode('utf-8')
             self.send_response(200 if result['ok'] else 500)
@@ -241,7 +564,13 @@ class CueSheetHandler(http.server.BaseHTTPRequestHandler):
             except Exception:
                 pass
 
-    def _generate(self, selected_names: list[str], gap_seconds: int = 5) -> dict:
+    def _generate(
+        self,
+        selected_names: list[str],
+        gap_seconds: int = 5,
+        range_start: str | None = None,
+        range_end: str | None = None,
+    ) -> dict:
         ptx = self.ptx_path
         base = ptx.stem
         work_dir = ptx.parent
@@ -249,12 +578,32 @@ class CueSheetHandler(http.server.BaseHTTPRequestHandler):
         # 25fps → frames per second
         merge_gap_frames = gap_seconds * 25
 
+        # Parse time-range strings to sample positions
+        sr = self.session.get('sample_rate', 48000) if self.session else 48000
+        samples_per_frame = sr / 25
+        def tc_to_samples(tc: str):
+            m = re.match(r'^(\d{1,2}):(\d{2}):(\d{2}):(\d{2})$', (tc or '').strip())
+            if not m:
+                return None
+            h, mi, s, f = (int(x) for x in m.groups())
+            if mi > 59 or s > 59 or f >= 25:
+                return None
+            return int((h*90000 + mi*1500 + s*25 + f) * samples_per_frame)
+
+        start_samples = tc_to_samples(range_start) if range_start else None
+        end_samples = tc_to_samples(range_end) if range_end else None
+
         try:
             n_clips = write_pt_text_from_session(
                 self.session, selected_names, intermediate_txt,
+                start_samples=start_samples,
+                end_samples=end_samples,
             )
             if n_clips == 0:
-                return {'ok': False, 'error': 'No clips found on the selected tracks.'}
+                msg = 'No clips found on the selected tracks.'
+                if start_samples is not None or end_samples is not None:
+                    msg = 'No clips fall within the selected time range.'
+                return {'ok': False, 'error': msg}
 
             # In-process call: works whether script or bundled.
             csv_src, pdf_src = cuesheet.main(
@@ -326,6 +675,22 @@ def main_inner() -> int:
         print(f"error: {msg}", file=sys.stderr)
         show_error_dialog(msg)
         return 2
+    if ptx_path.is_dir():
+        msg = (
+            f"This is a folder, not a Pro Tools session:\\n{ptx_path}\\n\\n"
+            "Right-click a .ptx file in Finder, not a folder."
+        )
+        print(f"error: {msg}", file=sys.stderr)
+        show_error_dialog(msg)
+        return 2
+    if ptx_path.suffix.lower() != '.ptx':
+        msg = (
+            f"This is not a Pro Tools session file:\\n{ptx_path.name}\\n\\n"
+            "Right-click a .ptx file in Finder."
+        )
+        print(f"error: {msg}", file=sys.stderr)
+        show_error_dialog(msg)
+        return 2
     if not TEMPLATE_PATH.exists():
         msg = f"report_template.html not found at {TEMPLATE_PATH}."
         print(f"error: {msg}", file=sys.stderr)
@@ -345,9 +710,11 @@ def main_inner() -> int:
         return 3
 
     html = render_html(session, TEMPLATE_PATH)
+    data_script = build_session_data_script(session)
+    injection = data_script + INJECTED_SCRIPT
     html_with_handler = (
-        html.replace('</body>', INJECTED_SCRIPT + '</body>', 1)
-        if '</body>' in html else html + INJECTED_SCRIPT
+        html.replace('</body>', injection + '</body>', 1)
+        if '</body>' in html else html + injection
     )
 
     CueSheetHandler.html_content = html_with_handler

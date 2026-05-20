@@ -38,6 +38,8 @@ def write_pt_text_from_session(
     session: dict,
     selected_track_names: list[str],
     output_path: Path,
+    start_samples: int | None = None,
+    end_samples: int | None = None,
 ) -> int:
     """Render selected tracks of a session dict as a Pro Tools text export.
 
@@ -45,6 +47,8 @@ def write_pt_text_from_session(
         session: parsed session dict from ptx_reader.read_session
         selected_track_names: list of track names (keys into session['track_clips'])
         output_path: where to write the .txt
+        start_samples: optional inclusive lower bound; clips ending before this are dropped
+        end_samples: optional inclusive upper bound; clips starting after this are dropped
 
     Returns: number of clip lines written.
     """
@@ -85,16 +89,23 @@ def write_pt_text_from_session(
 
         for event_num, clip in enumerate(sorted_clips, start=1):
             name = clip['clip_name']
-            start_samples = clip.get('start_samples', 0)
-            length_samples = clip.get('length_samples', 0)
-            end_samples = start_samples + length_samples
+            clip_start = clip.get('start_samples', 0)
+            clip_length = clip.get('length_samples', 0)
+            clip_end = clip_start + clip_length
 
-            if length_samples == 0:
+            if clip_length == 0:
                 continue
 
-            start_tc = samples_to_tc(start_samples)
-            end_tc = samples_to_tc(end_samples)
-            duration_tc = samples_to_tc(length_samples)
+            # Time-range filter: skip clips entirely outside the requested range.
+            # Keep any clip whose timespan overlaps the range.
+            if end_samples is not None and clip_start >= end_samples:
+                continue
+            if start_samples is not None and clip_end <= start_samples:
+                continue
+
+            start_tc = samples_to_tc(clip_start)
+            end_tc = samples_to_tc(clip_end)
+            duration_tc = samples_to_tc(clip_length)
 
             line = (
                 f"1       \t"
