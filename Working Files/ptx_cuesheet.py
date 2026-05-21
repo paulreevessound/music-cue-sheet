@@ -20,13 +20,16 @@ Requires Python 3.10+ when run as a script.
 """
 from __future__ import annotations
 import http.server
+import io
 import json
+import os
 import re
 import socket
 import sys
 import threading
 import traceback
 import webbrowser
+from contextlib import redirect_stdout, redirect_stderr
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -701,12 +704,46 @@ def main_inner() -> int:
         return 2
 
     print(f"Parsing {ptx_path.name}…")
-    session = read_session(ptx_path)
+
+    # When bundled, ptunxor lives in sys._MEIPASS (HERE) but the reader looks
+    # for it relative to CWD. Make it findable both ways: prepend HERE to PATH,
+    # and chdir into the bundle dir during the parse.
+    old_cwd = os.getcwd()
+    if getattr(sys, 'frozen', False):
+        os.environ['PATH'] = str(HERE) + os.pathsep + os.environ.get('PATH', '')
+        # Ensure ptunxor is executable (bundled binaries can lose +x)
+        ptunxor_path = HERE / 'ptunxor'
+        if ptunxor_path.exists():
+            try:
+                ptunxor_path.chmod(0o755)
+            except OSError:
+                pass
+        os.chdir(str(HERE))
+
+    # Capture stdout/stderr from read_session so failures can be surfaced —
+    # bundled apps have no visible console.
+    parse_log = io.StringIO()
+    try:
+        with redirect_stdout(parse_log), redirect_stderr(parse_log):
+            session = read_session(ptx_path)
+    finally:
+        if getattr(sys, 'frozen', False):
+            os.chdir(old_cwd)
+
+    diagnostic = parse_log.getvalue()
+    if diagnostic.strip():
+        print(diagnostic, file=sys.stderr)
+
     if not session.get('track_clips'):
         msg = (
             "No track clips extracted from this .ptx.\\n\\n"
-            "This usually means the ptunxor helper binary isn't available.\\n"
-            "Make sure ptunxor is bundled with the app or on your PATH."
+            "Most likely causes:\\n"
+            " - The bundled ptunxor binary can't run on this Mac (Apple Silicon build "
+            "won't run on Intel, or vice versa)\\n"
+            " - This .ptx is from a Pro Tools version the parser doesn't support\\n"
+            " - The .ptx is corrupted or empty\\n\\n"
+            "Diagnostic output:\\n"
+            + (diagnostic[:600] if diagnostic else "(no output)")
         )
         print(f"error: {msg}", file=sys.stderr)
         show_error_dialog(msg)
