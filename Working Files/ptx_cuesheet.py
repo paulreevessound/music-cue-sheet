@@ -726,6 +726,16 @@ def main_inner() -> int:
     try:
         with redirect_stdout(parse_log), redirect_stderr(parse_log):
             session = read_session(ptx_path)
+
+        # If the heuristic detected "already decoded" but we got nothing,
+        # retry with force_decode=True — the heuristic can misfire on some
+        # PT versions where the raw file happens to have block-marker bytes
+        # but is still actually obfuscated.
+        if not session.get('track_clips'):
+            print("  retry  : first pass yielded 0 clips — retrying with force_decode=True",
+                  file=parse_log)
+            with redirect_stdout(parse_log), redirect_stderr(parse_log):
+                session = read_session(ptx_path, force_decode=True)
     finally:
         if getattr(sys, 'frozen', False):
             os.chdir(old_cwd)
