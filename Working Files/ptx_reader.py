@@ -513,6 +513,7 @@ def build_hierarchy(tracks: list[str]) -> list[dict]:
     external = []
     record = []
     video = []
+    generic = defaultdict(list)   # non-standard but real tracks, grouped by prefix
     other = []
 
     def normalize_fam(s: str) -> str:
@@ -610,7 +611,17 @@ def build_hierarchy(tracks: list[str]) -> list[dict]:
         if "Booth Record" in t or "Stereo VO" in t or "ADR Record" in t:
             record.append(node(t, "Audio", "Record", depth=0))
             continue
-        other.append(node(t, infer_type(t), "Other", depth=0))
+        # Non-standard name (e.g. "Sync FX a1", "Spot FX b2", "GFX FX e5",
+        # "Editor BG d3") — the studio uses prefixes the family whitelist
+        # doesn't know. Group by the prefix left of a trailing
+        # "<letter(s)><digits>" channel designator so these still appear as
+        # tidy folders rather than being dropped or dumped flat.
+        m = re.match(r'^(.*\S)\s+[A-Za-z]{1,3}\s*\d{0,3}$', t)
+        grp = m.group(1).strip() if m else None
+        if grp and len(grp) >= 2:
+            generic[grp].append(node(t, "Audio", grp, depth=1))
+        else:
+            other.append(node(t, infer_type(t), "Other", depth=0))
 
     # Stitch tree together
     roots = []
@@ -664,6 +675,12 @@ def build_hierarchy(tracks: list[str]) -> list[dict]:
     for fam, items in mix_bus.items():
         roots.append({"name": f"{fam} mix bus", "type": "Folder", "format": "Mono",
                       "family": fam, "color": color_for(fam),
+                      "depth": 0, "children": sorted(items, key=lambda x: x["name"]),
+                      "synthetic": True})
+
+    for grp, items in sorted(generic.items()):
+        roots.append({"name": grp, "type": "Folder", "format": "Mono",
+                      "family": grp, "color": color_for(grp),
                       "depth": 0, "children": sorted(items, key=lambda x: x["name"]),
                       "synthetic": True})
 
@@ -721,9 +738,24 @@ def read_session(path: Path, force_decode: bool = False) -> dict:
     paths = sorted({s for s in all_strings if PATH_RE.match(s) and looks_like_real_path(s)})
     video_refs = extract_video_refs(data)
 
-    # tracks: short strings (<=60c) that look like post-prod naming
+    # --- track -> clip -> file mapping (ported ptformat block walk) ---
+    # Extracted early: clip-bearing track names are authoritative and feed the
+    # track list below.
+    clip_data = {"wav_files": [], "regions": [], "tracks": {}}
+    if extract_clips is not None:
+        try:
+            clip_data = extract_clips(data)
+        except Exception as e:  # pragma: no cover - defensive
+            print(f"  clips  : extraction failed ({e})", file=sys.stderr)
+    track_clips = clip_data.get("tracks", {})
+
+    # tracks: short strings (<=60c) that look like post-prod naming, UNIONed
+    # with every track that actually has clips. A track with audio must be
+    # selectable even if its name doesn't match the family whitelist (the
+    # studio uses prefixes like "Sync FX", "Spot FX", "GFX", "Editor BG"…).
     short = [s for s in all_strings if len(s) <= 60 and not AUDIO_RE.search(s) and not SESSION_RE.search(s) and not PATH_RE.match(s)]
-    tracks = sorted({s for s in short if TRACK_RE.match(s) and not looks_like_xor_noise(s)})
+    whitelisted = {s for s in short if TRACK_RE.match(s) and not looks_like_xor_noise(s)}
+    tracks = sorted(whitelisted | set(track_clips))
 
     # session metadata that's now readable
     sample_rate = extract_sample_rate(data)
@@ -738,14 +770,6 @@ def read_session(path: Path, force_decode: bool = False) -> dict:
     hierarchy = build_hierarchy(tracks)
     flat_tree = flatten_tree(hierarchy)
 
-    # --- track -> clip -> file mapping (ported ptformat block walk) ---
-    clip_data = {"wav_files": [], "regions": [], "tracks": {}}
-    if extract_clips is not None:
-        try:
-            clip_data = extract_clips(data)
-        except Exception as e:  # pragma: no cover - defensive
-            print(f"  clips  : extraction failed ({e})", file=sys.stderr)
-    track_clips = clip_data.get("tracks", {})
     total_clips = sum(len(v) for v in track_clips.values())
     # attach clips to matching rows in the flat tree
     for row in flat_tree:
