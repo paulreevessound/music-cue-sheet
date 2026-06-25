@@ -692,14 +692,14 @@ def build_hierarchy(tracks: list[str]) -> list[dict]:
     return roots
 
 
-def build_tree_from_list(entries: list, clip_names: set) -> list[dict]:
+def build_tree_from_list(entries: list) -> list[dict]:
     """Build the folder tree from the session's OWN ordered track list + type
     bytes — the real structure as arranged in Pro Tools, not guessed from
     names. entries = [(type, name)] where 0x09=folder, 0x0b=aux, 0x00=audio,
     0x02=bus. Nesting: a folder preceded by an aux is a subfolder, otherwise a
     family root; leaves nest under the currently-open folder.
     """
-    TYPE_FOLDER, TYPE_AUX, TYPE_AUDIO = 0x09, 0x0b, 0x00
+    TYPE_FOLDER, TYPE_AUX, TYPE_AUDIO, TYPE_VIDEO = 0x09, 0x0b, 0x00, 0x08
 
     def fam_of(name: str) -> str:
         parts = name.split()
@@ -731,25 +731,12 @@ def build_tree_from_list(entries: list, clip_names: set) -> list[dict]:
                 stack.pop()
             nd = make(name, "Aux", "Stereo", (stack[-1]["depth"] + 1) if stack else 0)
             (stack[-1]["children"] if stack else roots).append(nd)
-        else:  # audio leaf or bus
-            ttype = "Audio" if t == TYPE_AUDIO else "Aux"
+        else:  # leaf: audio / bus / bed / video
+            ttype = "Audio" if t == TYPE_AUDIO else ("Video" if t == TYPE_VIDEO else "Aux")
             nd = make(name, ttype, "Stereo", (stack[-1]["depth"] + 1) if stack else 0)
             (stack[-1]["children"] if stack else roots).append(nd)
         prev_type = t
 
-    # Append any clip-bearing track that the header block didn't list (later
-    # additions live outside it) so nothing is missing or unselectable.
-    placed = {n for _, n in entries}
-    extra = sorted(n for n in clip_names if n not in placed)
-    if extra:
-        roots.append({
-            "name": "Other tracks", "type": "Folder", "format": "Mono",
-            "family": "Other", "color": color_for("Other"), "depth": 0,
-            "synthetic": True,
-            "children": [{"name": n, "type": "Audio", "format": "Stereo",
-                          "family": "Other", "color": color_for("Other"),
-                          "depth": 1, "children": []} for n in extra],
-        })
     return roots
 
 
@@ -825,7 +812,7 @@ def read_session(path: Path, force_decode: bool = False) -> dict:
     # read.
     track_list = clip_data.get("track_list", [])
     if track_list:
-        hierarchy = build_tree_from_list(track_list, set(track_clips))
+        hierarchy = build_tree_from_list(track_list)
     else:
         hierarchy = build_hierarchy(sorted(set(canonical) | set(track_clips) | whitelisted))
     flat_tree = flatten_tree(hierarchy)

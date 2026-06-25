@@ -58,7 +58,8 @@ def _parse_three_point(data, j):
 
 
 # Track types as stored in the header track list (low byte of the 2-byte tag).
-TRACK_TYPES = {0x00, 0x02, 0x09, 0x0b}   # audio, bus, folder, aux
+#   0x00 audio   0x02 bus   0x05 bed   0x08 video/cuts   0x09 folder   0x0b aux
+TRACK_TYPES = {0x00, 0x02, 0x05, 0x08, 0x09, 0x0b}
 
 
 def _track_rec_at(data: bytes, i: int):
@@ -95,8 +96,9 @@ def extract_track_list(decoded: bytes) -> list:
     names. (The block is the template structure and can omit later-added
     tracks; callers should append any clip-bearing track not found here.)"""
     # Find the start: the first offset that begins a run of >=10 records.
+    # The list begins inside the cleartext header (well before 0x1000).
     start = None
-    i = 0x1000
+    i = 0x400
     while i < 0x4000 and start is None:
         j, count = i, 0
         p = _track_rec_at(decoded, j)
