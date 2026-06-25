@@ -78,33 +78,43 @@ def find_ptunxor() -> Path | None:
 PTUNXOR_TIMEOUT_SEC = 120
 
 
-def decode_ptx(path: Path, force: bool = False) -> bytes:
-    """Read a .ptx file and return its plain-text byte stream. If the file is
-    Avid-obfuscated and ptunxor is available, run it; otherwise return the raw
-    bytes (which still surface enough strings for partial extraction).
+def _audio_ref_count(data: bytes) -> int:
+    """Cheap richness signal: how many audio-file references the byte stream
+    contains. A correctly decoded session has hundreds/thousands; an
+    obfuscated (or mis-decoded) one has almost none. Used to decide whether
+    ptunxor's output is actually better than the raw bytes — far more reliable
+    than the printable-ratio heuristic, which false-negatives on some sessions
+    (e.g. an obfuscated file whose 0x10000 window happens to be printable)."""
+    return sum(data.count(ext) for ext in
+               (b".wav", b".WAV", b".aif", b".AIF", b".aiff", b".mp3", b".flac"))
 
-    force=True skips the is_obfuscated() heuristic and runs ptunxor regardless
-    — used by the read_session retry when the heuristic misfires (some PT
-    versions leave block-marker bytes in the clear yet are still obfuscated)."""
+
+def decode_ptx(path: Path, force: bool = False) -> bytes:
+    """Read a .ptx file and return its plain-text byte stream.
+
+    Runs ptunxor (if available) and keeps whichever of {raw, decoded} actually
+    has the richer session content — measured by audio-file references. We no
+    longer let the is_obfuscated() printable-ratio heuristic *decide* whether
+    to decode, because it misfires on real sessions (some obfuscated files read
+    as "already decoded" and never get un-XORed, yielding 0 regions). force=True
+    keeps ptunxor's output regardless of the comparison."""
     raw = path.read_bytes()
-    if not force and not is_obfuscated(raw):
-        print(f"  format : already decoded ({len(raw):,} bytes)", file=sys.stderr)
-        return raw
     binary = find_ptunxor()
     if binary is None:
-        print("  format : OBFUSCATED — ptunxor not found, running with raw bytes "
-              "(extraction will be partial)", file=sys.stderr)
-        print("           Build ptformat from https://github.com/zamaudio/ptformat",
-              file=sys.stderr)
+        if is_obfuscated(raw):
+            print("  format : OBFUSCATED — ptunxor not found, running with raw bytes "
+                  "(extraction will be partial)", file=sys.stderr)
+            print("           Build ptformat from https://github.com/zamaudio/ptformat",
+                  file=sys.stderr)
+        else:
+            print(f"  format : no ptunxor; using raw bytes ({len(raw):,})", file=sys.stderr)
         return raw
     try:
         res = subprocess.run(
             [str(binary), str(path)],
             capture_output=True, check=True, timeout=PTUNXOR_TIMEOUT_SEC,
         )
-        print(f"  format : obfuscated → decoded via {binary.name} "
-              f"({len(res.stdout):,} bytes)", file=sys.stderr)
-        return res.stdout
+        decoded = res.stdout
     except subprocess.TimeoutExpired:
         print(f"  format : ptunxor timed out after {PTUNXOR_TIMEOUT_SEC}s; "
               "using raw bytes (extraction will be partial)", file=sys.stderr)
@@ -113,6 +123,16 @@ def decode_ptx(path: Path, force: bool = False) -> bytes:
         print(f"  format : ptunxor failed ({e.returncode}); using raw bytes",
               file=sys.stderr)
         return raw
+
+    raw_refs = _audio_ref_count(raw)
+    dec_refs = _audio_ref_count(decoded)
+    if force or dec_refs > raw_refs:
+        print(f"  format : decoded via {binary.name} "
+              f"({len(decoded):,} bytes, audio refs {raw_refs}→{dec_refs})", file=sys.stderr)
+        return decoded
+    print(f"  format : already decoded; raw kept "
+          f"({len(raw):,} bytes, audio refs {raw_refs} ≥ {dec_refs})", file=sys.stderr)
+    return raw
 
 
 def extract_length_prefixed(data: bytes) -> dict[str, int]:
