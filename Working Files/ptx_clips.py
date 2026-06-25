@@ -57,6 +57,77 @@ def _parse_three_point(data, j):
     return start, offset, length
 
 
+# Track types as stored in the header track list (low byte of the 2-byte tag).
+TRACK_TYPES = {0x00, 0x02, 0x09, 0x0b}   # audio, bus, folder, aux
+
+
+def _track_rec_at(data: bytes, i: int):
+    """Parse a header track record at i: [type:2 LE][namelen:4 LE][name].
+    Returns (type_byte, name, end_offset) or None."""
+    if i + 6 > len(data):
+        return None
+    if data[i + 1] != 0 or data[i] not in TRACK_TYPES:
+        return None
+    L = struct.unpack_from("<I", data, i + 2)[0]
+    if not (1 <= L <= 48):
+        return None
+    nm = data[i + 4 + 2:i + 4 + 2 + L]
+    if not all(0x20 <= b < 0x7f for b in nm):
+        return None
+    return (data[i], nm.decode("ascii"), i + 6 + L)
+
+
+def _next_track_rec(data: bytes, frm: int):
+    """Records have variable trailing bytes; find the next one within a window."""
+    for k in range(frm, min(frm + 48, len(data))):
+        if _track_rec_at(data, k):
+            return k
+    return None
+
+
+def extract_track_list(decoded: bytes) -> list:
+    """Read the session's own ordered track list from the header.
+
+    Returns [(type_byte, name), ...] in true Pro Tools track order, where
+    type is 0x09 folder, 0x0b aux/submaster, 0x00 audio, 0x02 bus. This is the
+    authoritative structure as the user arranged it — relabelled folders and
+    all — so the tree can be read from the session instead of guessed from
+    names. (The block is the template structure and can omit later-added
+    tracks; callers should append any clip-bearing track not found here.)"""
+    # Find the start: the first offset that begins a run of >=10 records.
+    start = None
+    i = 0x1000
+    while i < 0x4000 and start is None:
+        j, count = i, 0
+        p = _track_rec_at(decoded, j)
+        while p:
+            count += 1
+            if count >= 10:
+                start = i
+                break
+            nxt = _next_track_rec(decoded, p[2])
+            if nxt is None:
+                break
+            j = nxt
+            p = _track_rec_at(decoded, j)
+        i += 1
+    if start is None:
+        return []
+
+    out = []
+    i = start
+    while True:
+        p = _track_rec_at(decoded, i)
+        if not p:
+            break
+        out.append((p[0], p[1]))
+        nxt = _next_track_rec(decoded, p[2])
+        if nxt is None:
+            break
+        i = nxt
+    return out
+
+
 def extract_clips(decoded: bytes) -> dict:
     """Build the track -> clips mapping. Returns a dict with:
         wav_files:  [filename, ...]                       (indexed)
@@ -176,6 +247,7 @@ def extract_clips(decoded: bytes) -> dict:
         "regions": regions,
         "tracks": tracks,
         "track_names": track_names,
+        "track_list": extract_track_list(decoded),
     }
 
 
