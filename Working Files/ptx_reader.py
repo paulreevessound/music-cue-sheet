@@ -72,12 +72,22 @@ def find_ptunxor() -> Path | None:
     return Path(which) if which else None
 
 
-def decode_ptx(path: Path) -> bytes:
+# Hard ceiling on how long ptunxor may run before we give up and fall back to
+# raw bytes. Without this, a session ptunxor can't handle hangs the whole app
+# forever (no browser, no error dialog).
+PTUNXOR_TIMEOUT_SEC = 120
+
+
+def decode_ptx(path: Path, force: bool = False) -> bytes:
     """Read a .ptx file and return its plain-text byte stream. If the file is
     Avid-obfuscated and ptunxor is available, run it; otherwise return the raw
-    bytes (which still surface enough strings for partial extraction)."""
+    bytes (which still surface enough strings for partial extraction).
+
+    force=True skips the is_obfuscated() heuristic and runs ptunxor regardless
+    — used by the read_session retry when the heuristic misfires (some PT
+    versions leave block-marker bytes in the clear yet are still obfuscated)."""
     raw = path.read_bytes()
-    if not is_obfuscated(raw):
+    if not force and not is_obfuscated(raw):
         print(f"  format : already decoded ({len(raw):,} bytes)", file=sys.stderr)
         return raw
     binary = find_ptunxor()
@@ -90,11 +100,15 @@ def decode_ptx(path: Path) -> bytes:
     try:
         res = subprocess.run(
             [str(binary), str(path)],
-            capture_output=True, check=True,
+            capture_output=True, check=True, timeout=PTUNXOR_TIMEOUT_SEC,
         )
         print(f"  format : obfuscated → decoded via {binary.name} "
               f"({len(res.stdout):,} bytes)", file=sys.stderr)
         return res.stdout
+    except subprocess.TimeoutExpired:
+        print(f"  format : ptunxor timed out after {PTUNXOR_TIMEOUT_SEC}s; "
+              "using raw bytes (extraction will be partial)", file=sys.stderr)
+        return raw
     except subprocess.CalledProcessError as e:
         print(f"  format : ptunxor failed ({e.returncode}); using raw bytes",
               file=sys.stderr)
@@ -674,8 +688,8 @@ def parse_elevenlabs(filename: str) -> dict | None:
 # --- driver -----------------------------------------------------------------
 
 
-def read_session(path: Path) -> dict:
-    data = decode_ptx(path)
+def read_session(path: Path, force_decode: bool = False) -> dict:
+    data = decode_ptx(path, force=force_decode)
     raw_size = path.stat().st_size
 
     lp = extract_length_prefixed(data)

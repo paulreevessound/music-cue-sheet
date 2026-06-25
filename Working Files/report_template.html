@@ -462,7 +462,7 @@ tr.clip-row .clip-file { color: var(--muted); }
       </div>
     </div>
 
-    <div class="section collapsed" data-key="tracks">
+    <div class="section" data-key="tracks">
       <div class="sec-head" onclick="toggleSection(this)">
         <span class="chev"></span>
         <span>Tracks <span id="track-count" style="color:var(--muted); font-weight:500;"></span></span>
@@ -779,8 +779,9 @@ tr.clip-row .clip-file { color: var(--muted); }
     applyVisibility();
   }
 
-  // initial fold: collapse subgroups
-  rows.forEach((r, i) => { if (r.has_children && r.depth >= 1) collapsed.add(i); });
+  // initial state: fully expanded so every folder and the tracks inside it
+  // are visible without having to drill in. (Use Collapse all / the filter
+  // box to narrow down.)
   applyVisibility();
 
   document.getElementById("expand-all").addEventListener("click", () => {
@@ -795,7 +796,6 @@ tr.clip-row .clip-file { color: var(--muted); }
     if (!f) {
       filterFn = null;
       collapsed.clear();
-      rows.forEach((r, i) => { if (r.has_children && r.depth >= 1) collapsed.add(i); });
       applyVisibility();
       return;
     }

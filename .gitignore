@@ -8,8 +8,10 @@
 # Generated cue sheets (client deliverables)
 *_cuesheet.csv
 *_cuesheet.pdf
+*_cuesheet.xlsx
 * Cuesheet.csv
 * Cuesheet.pdf
+* Cuesheet.xlsx
 
 # Intermediate / extracted session data
 *.cuesheet-tmp.txt
@@ -27,6 +29,11 @@ __pycache__/
 
 # Binaries
 ptunxor
+
+# PyInstaller build artifacts
+build/
+dist/
+*.spec
 
 # Screenshots
 Screenshot*.png

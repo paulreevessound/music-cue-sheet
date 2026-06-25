@@ -33,9 +33,9 @@ command -v make >/dev/null || { echo "  ERROR: make not found. Install with: xco
 
 # ── 2. Python packages ───────────────────────────────────────────
 echo
-echo "[2/5] Installing Python packages (pyinstaller, reportlab)…"
+echo "[2/5] Installing Python packages (pyinstaller, reportlab, openpyxl)…"
 python3 -m pip install --quiet --upgrade pip
-python3 -m pip install --quiet pyinstaller reportlab
+python3 -m pip install --quiet pyinstaller reportlab openpyxl
 echo "  Done."
 
 
@@ -74,6 +74,8 @@ python3 -m PyInstaller \
     --hidden-import "ptx_reader" \
     --hidden-import "ptx_to_txt" \
     --hidden-import "cuesheet" \
+    --hidden-import "openpyxl" \
+    --collect-submodules "openpyxl" \
     --hidden-import "reportlab" \
     --hidden-import "reportlab.pdfgen" \
     --hidden-import "reportlab.platypus" \

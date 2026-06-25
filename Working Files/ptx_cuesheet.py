@@ -80,6 +80,13 @@ TEMPLATE_PATH = HERE / "report_template.html"
 INJECTED_SCRIPT = """
 <script>
 (function() {
+  // Tell the local server to shut down when this page goes away, so the app
+  // doesn't linger as a zombie process if the user closes the tab without
+  // exporting. sendBeacon survives the page unload.
+  window.addEventListener('pagehide', function () {
+    try { navigator.sendBeacon('/close'); } catch (_) {}
+  });
+
   // ─── Family → colour map ─────────────────────────────────────
   const COLOR_MAP = {
     'MX': '#fbbf24', 'MUSIC': '#fbbf24', 'M': '#fbbf24', 'MUS': '#fbbf24',
@@ -214,8 +221,7 @@ INJECTED_SCRIPT = """
     );
     const svgNs = 'http://www.w3.org/2000/svg';
     const svg = document.createElementNS(svgNs, 'svg');
-    svg.setAttribute('width', '100%');
-    svg.style.cssText = 'display: block;';
+    svg.style.cssText = 'display: block; cursor: crosshair;';
     svgWrap.appendChild(svg);
     panel.appendChild(svgWrap);
 
@@ -223,6 +229,13 @@ INJECTED_SCRIPT = """
     emptyMsg.textContent = 'Tick tracks above to preview them on the timeline.';
     emptyMsg.style.cssText = 'padding: 24px; text-align: center; opacity: 0.5;';
     svgWrap.appendChild(emptyMsg);
+
+    // Caption: signals the timeline is interactive.
+    const tlCaption = document.createElement('div');
+    tlCaption.textContent = 'Hover to read the timecode · click to set the in / out points';
+    tlCaption.style.cssText = 'margin-top: 6px; font-size: 11px; opacity: 0.55; text-align: center;';
+    tlCaption.style.display = 'none';
+    panel.appendChild(tlCaption);
 
     // ─── Merge-gap row ─────────────────────────────────────────
     const gapRow = document.createElement('div');
@@ -268,7 +281,11 @@ INJECTED_SCRIPT = """
     // ─── Timeline renderer ─────────────────────────────────────
     const SVG_HEIGHT_PER_ROW = 16;
     const SVG_GAP = 3;
-    const TICKS_HEIGHT = 18;
+    const AXIS_HEIGHT = 30;   // room for tick marks + readable labels
+
+    // Geometry of the most recent render, read by the hover/click handlers.
+    let curWpx = 0, curTotalSec = 0, curLanesBottom = 0;
+    let hoverLine = null, hoverPill = null, hoverText = null;
 
     function getSelectedTrackNames() {
       const cboxes = document.querySelectorAll('input[type="checkbox"][aria-label^="Select "]');
@@ -305,38 +322,60 @@ INJECTED_SCRIPT = """
       const selected = getSelectedTrackNames();
       if (!session || selected.length === 0 || maxSample === 0) {
         svg.setAttribute('height', '0');
+        curTotalSec = 0;
         emptyMsg.style.display = '';
+        tlCaption.style.display = 'none';
         return;
       }
       emptyMsg.style.display = 'none';
+      tlCaption.style.display = '';
 
-      // Width: SVG fills container; we use a virtual viewBox
-      const W = 1000;
+      // Pixel-accurate coordinate space: the viewBox matches the on-screen
+      // pixel size 1:1, so nothing — especially the timecode text — gets
+      // stretched. (The old code scaled a 1000-unit space with
+      // preserveAspectRatio="none", which distorted the labels.)
+      const Wpx = Math.max(320, (svgWrap.clientWidth || 900) - 16);
       const matched = session.tracks.filter(t => selected.includes(t.name));
       const rows = matched.length;
-      const H = rows * (SVG_HEIGHT_PER_ROW + SVG_GAP) + TICKS_HEIGHT;
-      svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+      const lanesBottom = rows * (SVG_HEIGHT_PER_ROW + SVG_GAP);
+      const H = lanesBottom + AXIS_HEIGHT;
+      svg.setAttribute('viewBox', `0 0 ${Wpx} ${H}`);
+      svg.setAttribute('width', Wpx);
       svg.setAttribute('height', H);
-      svg.setAttribute('preserveAspectRatio', 'none');
+      svg.removeAttribute('preserveAspectRatio');
+
+      curWpx = Wpx;
+      curLanesBottom = lanesBottom;
+      curTotalSec = maxSample / session.sample_rate;
 
       const range = getRange();
+      const totalSec = curTotalSec;
+      const tickSec = chooseTickIntervalSec(totalSec);
 
+      // Faint gridlines at each tick, behind the clips, to line a clip up
+      // with the time axis by eye.
+      for (let t = 0; t <= totalSec + 1e-6; t += tickSec) {
+        const x = (t / totalSec) * Wpx;
+        const g = document.createElementNS(svgNs, 'line');
+        g.setAttribute('x1', x); g.setAttribute('x2', x);
+        g.setAttribute('y1', 0); g.setAttribute('y2', lanesBottom);
+        g.setAttribute('stroke', 'currentColor');
+        g.setAttribute('opacity', '0.08');
+        svg.appendChild(g);
+      }
+
+      // Track lanes + clips
       matched.forEach((t, i) => {
         const y = i * (SVG_HEIGHT_PER_ROW + SVG_GAP);
         const colour = colourFor(t.family || t.name);
-        // background lane
         const lane = document.createElementNS(svgNs, 'rect');
-        lane.setAttribute('x', '0');
-        lane.setAttribute('y', y);
-        lane.setAttribute('width', W);
-        lane.setAttribute('height', SVG_HEIGHT_PER_ROW);
+        lane.setAttribute('x', '0'); lane.setAttribute('y', y);
+        lane.setAttribute('width', Wpx); lane.setAttribute('height', SVG_HEIGHT_PER_ROW);
         lane.setAttribute('fill', 'rgba(127,127,127,0.06)');
         svg.appendChild(lane);
-        // clip rects
         for (const c of t.clips) {
-          const x = (c.s / maxSample) * W;
-          const w = Math.max(1, (c.l / maxSample) * W);
-          // dim if outside range
+          const x = (c.s / maxSample) * Wpx;
+          const w = Math.max(1, (c.l / maxSample) * Wpx);
           let opacity = 1;
           if (range) {
             const cEnd = c.s + c.l;
@@ -344,54 +383,133 @@ INJECTED_SCRIPT = """
             opacity = overlaps ? 1 : 0.18;
           }
           const r = document.createElementNS(svgNs, 'rect');
-          r.setAttribute('x', x);
-          r.setAttribute('y', y + 1);
-          r.setAttribute('width', w);
-          r.setAttribute('height', SVG_HEIGHT_PER_ROW - 2);
-          r.setAttribute('fill', colour);
-          r.setAttribute('opacity', opacity);
+          r.setAttribute('x', x); r.setAttribute('y', y + 1);
+          r.setAttribute('width', w); r.setAttribute('height', SVG_HEIGHT_PER_ROW - 2);
+          r.setAttribute('fill', colour); r.setAttribute('opacity', opacity);
           svg.appendChild(r);
         }
       });
 
-      // Range overlay lines (vertical)
+      // Selected-range markers (vertical)
       if (range) {
-        const fromX = (range.startSamples / maxSample) * W;
-        const toX = (range.endSamples / maxSample) * W;
+        const fromX = (range.startSamples / maxSample) * Wpx;
+        const toX = (range.endSamples / maxSample) * Wpx;
         for (const x of [fromX, toX]) {
           const line = document.createElementNS(svgNs, 'line');
           line.setAttribute('x1', x); line.setAttribute('x2', x);
-          line.setAttribute('y1', '0'); line.setAttribute('y2', H - TICKS_HEIGHT);
-          line.setAttribute('stroke', '#1a1a1a');
-          line.setAttribute('stroke-width', '1');
+          line.setAttribute('y1', '0'); line.setAttribute('y2', lanesBottom);
+          line.setAttribute('stroke', '#1a1a1a'); line.setAttribute('stroke-width', '1.5');
           line.setAttribute('stroke-dasharray', '3 2');
           svg.appendChild(line);
         }
       }
 
-      // Time ticks
-      const totalSec = maxSample / session.sample_rate;
-      const tickSec = chooseTickIntervalSec(totalSec);
-      const tickY = rows * (SVG_HEIGHT_PER_ROW + SVG_GAP);
+      // Time axis: tick marks + readable HH:MM:SS labels. Frames are always 00
+      // at whole-second tick intervals, so we drop them here; the hover
+      // readout shows the full HH:MM:SS:FF.
       for (let t = 0; t <= totalSec + 1e-6; t += tickSec) {
-        const x = (t / totalSec) * W;
+        const x = (t / totalSec) * Wpx;
         const tk = document.createElementNS(svgNs, 'line');
         tk.setAttribute('x1', x); tk.setAttribute('x2', x);
-        tk.setAttribute('y1', tickY); tk.setAttribute('y2', tickY + 4);
-        tk.setAttribute('stroke', 'currentColor'); tk.setAttribute('opacity', '0.4');
+        tk.setAttribute('y1', lanesBottom); tk.setAttribute('y2', lanesBottom + 5);
+        tk.setAttribute('stroke', 'currentColor'); tk.setAttribute('opacity', '0.5');
         svg.appendChild(tk);
+
         const tx = document.createElementNS(svgNs, 'text');
-        const frames = Math.round(t * FPS);
-        tx.setAttribute('x', x + 3);
-        tx.setAttribute('y', tickY + 13);
-        tx.setAttribute('font-size', '9');
-        tx.setAttribute('font-family', 'ui-monospace, monospace');
+        const label = framesToTc(Math.round(t * FPS)).slice(0, 8); // HH:MM:SS
+        let anchor = 'middle', lx = x;
+        if (x < 24) { anchor = 'start'; lx = 1; }
+        else if (x > Wpx - 24) { anchor = 'end'; lx = Wpx - 1; }
+        tx.setAttribute('x', lx);
+        tx.setAttribute('y', lanesBottom + 20);
+        tx.setAttribute('font-size', '11');
+        tx.setAttribute('font-family', 'ui-monospace, Menlo, monospace');
         tx.setAttribute('fill', 'currentColor');
-        tx.setAttribute('opacity', '0.6');
-        tx.textContent = framesToTc(frames);
+        tx.setAttribute('opacity', '0.9');
+        tx.setAttribute('text-anchor', anchor);
+        tx.textContent = label;
         svg.appendChild(tx);
       }
+
+      // Hover readout elements (guide line + dark pill with full TC), appended
+      // last so they sit on top. Hidden until the pointer moves over the SVG.
+      hoverLine = document.createElementNS(svgNs, 'line');
+      hoverLine.setAttribute('y1', 0); hoverLine.setAttribute('y2', lanesBottom);
+      hoverLine.setAttribute('stroke', '#1a1a1a'); hoverLine.setAttribute('stroke-width', '1');
+      hoverLine.setAttribute('opacity', '0.85');
+      hoverLine.style.display = 'none';
+      hoverLine.style.pointerEvents = 'none';
+      svg.appendChild(hoverLine);
+
+      hoverPill = document.createElementNS(svgNs, 'rect');
+      hoverPill.setAttribute('height', '16'); hoverPill.setAttribute('width', '80');
+      hoverPill.setAttribute('rx', '3'); hoverPill.setAttribute('fill', '#1a1a1a');
+      hoverPill.style.display = 'none';
+      hoverPill.style.pointerEvents = 'none';
+      svg.appendChild(hoverPill);
+
+      hoverText = document.createElementNS(svgNs, 'text');
+      hoverText.setAttribute('font-size', '11');
+      hoverText.setAttribute('font-family', 'ui-monospace, Menlo, monospace');
+      hoverText.setAttribute('fill', '#ffffff');
+      hoverText.setAttribute('text-anchor', 'middle');
+      hoverText.style.display = 'none';
+      hoverText.style.pointerEvents = 'none';
+      svg.appendChild(hoverText);
     }
+
+    // Map a pointer X (client coords) to {x in svg units, full timecode}.
+    function tcAtClientX(clientX) {
+      const rect = svg.getBoundingClientRect();
+      let x = clientX - rect.left;
+      x = Math.max(0, Math.min(curWpx, x));
+      const t = curWpx ? (x / curWpx) * curTotalSec : 0;
+      return { x: x, tc: framesToTc(Math.round(t * FPS)) };
+    }
+
+    // Hover readout: guide line + pill showing the exact timecode anywhere.
+    svg.addEventListener('mousemove', (e) => {
+      if (!curTotalSec || !hoverLine) return;
+      const r = tcAtClientX(e.clientX);
+      hoverLine.setAttribute('x1', r.x); hoverLine.setAttribute('x2', r.x);
+      hoverLine.style.display = '';
+      const pillW = 80;
+      let px = Math.max(0, Math.min(curWpx - pillW, r.x - pillW / 2));
+      hoverPill.setAttribute('x', px); hoverPill.setAttribute('y', 1);
+      hoverPill.style.display = '';
+      hoverText.setAttribute('x', px + pillW / 2); hoverText.setAttribute('y', 12);
+      hoverText.textContent = r.tc;
+      hoverText.style.display = '';
+    });
+    svg.addEventListener('mouseleave', () => {
+      if (hoverLine) hoverLine.style.display = 'none';
+      if (hoverPill) hoverPill.style.display = 'none';
+      if (hoverText) hoverText.style.display = 'none';
+    });
+
+    // Click-to-set: 1st click sets In, 2nd sets Out (auto-ordered); a 3rd
+    // click starts a fresh selection. Clear button resets the cycle.
+    svg.addEventListener('click', (e) => {
+      if (!curTotalSec) return;
+      const tc = tcAtClientX(e.clientX).tc;
+      if (!fromIn.value || (fromIn.value && toIn.value)) {
+        fromIn.value = tc;
+        toIn.value = '';
+      } else if (tcToFrames(tc) <= tcToFrames(fromIn.value)) {
+        toIn.value = fromIn.value;
+        fromIn.value = tc;
+      } else {
+        toIn.value = tc;
+      }
+      renderTimeline();
+    });
+
+    // Keep the timeline width correct on window resize.
+    let resizeRAF = null;
+    window.addEventListener('resize', () => {
+      if (resizeRAF) cancelAnimationFrame(resizeRAF);
+      resizeRAF = requestAnimationFrame(renderTimeline);
+    });
 
     // Re-render whenever any checkbox state changes or range inputs change.
     // Use bubble phase + rAF so we run AFTER the template's own change
@@ -531,6 +649,19 @@ class CueSheetHandler(http.server.BaseHTTPRequestHandler):
 
     def do_POST(self):
         url = urlparse(self.path)
+        if url.path == '/close':
+            # Page was closed; drain any beacon body and shut the server down.
+            try:
+                length = int(self.headers.get('Content-Length', 0))
+                if length:
+                    self.rfile.read(length)
+            except (TypeError, ValueError):
+                pass
+            self.send_response(204)
+            self.end_headers()
+            if self.shutdown_event:
+                threading.Timer(0.2, self.shutdown_event.set).start()
+            return
         if url.path != '/generate':
             self.send_error(404)
             return
@@ -612,39 +743,41 @@ class CueSheetHandler(http.server.BaseHTTPRequestHandler):
                 return {'ok': False, 'error': msg}
 
             # In-process call: works whether script or bundled.
-            csv_src, pdf_src = cuesheet.main(
+            xlsx_src = Path(cuesheet.main(
                 str(intermediate_txt),
                 merge_gap_frames=merge_gap_frames,
-            )
-            csv_src = Path(csv_src)
-            pdf_src = Path(pdf_src)
+            ))
 
-            if not csv_src.exists() or not pdf_src.exists():
-                return {'ok': False, 'error': 'cuesheet pipeline ran but expected outputs were not found.'}
+            if not xlsx_src.exists():
+                return {'ok': False, 'error': 'cuesheet pipeline ran but the expected .xlsx was not found.'}
 
-            dst_csv = work_dir / f"{base} Cuesheet.csv"
-            dst_pdf = work_dir / f"{base} Cuesheet.pdf"
-
-            if dst_csv.exists():
-                dst_csv.unlink()
-            if dst_pdf.exists():
-                dst_pdf.unlink()
-            csv_src.rename(dst_csv)
-            pdf_src.rename(dst_pdf)
+            dst_xlsx = work_dir / f"{base} Cuesheet.xlsx"
+            if dst_xlsx.exists():
+                dst_xlsx.unlink()
+            xlsx_src.rename(dst_xlsx)
 
             return {
                 'ok': True,
-                'csv': str(dst_csv),
-                'pdf': str(dst_pdf),
+                'xlsx': str(dst_xlsx),
                 'tracks_used': len(selected_names),
                 'clips': n_clips,
             }
         finally:
-            if intermediate_txt.exists():
-                try:
-                    intermediate_txt.unlink()
-                except OSError:
-                    pass
+            # Sweep all intermediates: the bridge .txt and the cuesheet
+            # pipeline's "<stem>_cuesheet.xlsx/.pdf" outputs, which are only
+            # renamed away on the success path. A mid-way failure would
+            # otherwise leave them next to the session.
+            stem = intermediate_txt.stem  # "<base>.cuesheet-tmp"
+            leftovers = [
+                intermediate_txt,
+                work_dir / f"{stem}_cuesheet.xlsx",
+            ]
+            for f in leftovers:
+                if f.exists():
+                    try:
+                        f.unlink()
+                    except OSError:
+                        pass
 
 
 def find_free_port() -> int:
@@ -730,12 +863,27 @@ def main_inner() -> int:
         # If the heuristic detected "already decoded" but we got nothing,
         # retry with force_decode=True — the heuristic can misfire on some
         # PT versions where the raw file happens to have block-marker bytes
-        # but is still actually obfuscated.
+        # but is still actually obfuscated. Gracefully skip if the bundled
+        # reader is too old to support this kwarg.
         if not session.get('track_clips'):
-            print("  retry  : first pass yielded 0 clips — retrying with force_decode=True",
-                  file=parse_log)
-            with redirect_stdout(parse_log), redirect_stderr(parse_log):
-                session = read_session(ptx_path, force_decode=True)
+            try:
+                print("  retry  : first pass yielded 0 clips — retrying with force_decode=True",
+                      file=parse_log)
+                with redirect_stdout(parse_log), redirect_stderr(parse_log):
+                    retry = read_session(ptx_path, force_decode=True)
+                # Only adopt the forced re-decode if it actually recovered
+                # clips. Forcing ptunxor on a file that was already decoded can
+                # produce a garbled parse with fewer tracks/folders, so never
+                # let the retry replace an otherwise-good first parse.
+                if retry.get('track_clips'):
+                    print("  retry  : force_decode recovered clips — using it", file=parse_log)
+                    session = retry
+                else:
+                    print("  retry  : force_decode found no clips — keeping the original parse",
+                          file=parse_log)
+            except TypeError as e:
+                print(f"  retry  : skipped (reader doesn't support force_decode: {e})",
+                      file=parse_log)
     finally:
         if getattr(sys, 'frozen', False):
             os.chdir(old_cwd)
