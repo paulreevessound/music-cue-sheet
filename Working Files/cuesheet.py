@@ -283,17 +283,25 @@ def main(input_file, merge_gap_frames=None):
         unique_clips.append(clip)
     clips = unique_clips
 
-    # Merge adjacent same-name clips within 5-second gap
+    # Consolidate same-name clips that overlap or sit within the gap — even when
+    # OTHER clips are interleaved between them in time. A music cue is usually
+    # chopped into segments (edits/crossfades) with FX or other clips landing in
+    # the gaps; tracking the open cue per NAME (not just the previous row) keeps
+    # the music cue as a single entry instead of splitting it across rows.
+    open_by_name = {}   # name -> index of its currently-open cue in merged_clips
     merged_clips = []
-    for clip in clips:
+    for clip in clips:  # sorted by start
         name, start, end, duration = clip
-        if merged_clips:
-            prev_name, prev_start, prev_end, _ = merged_clips[-1]
-            if name == prev_name and tc_to_frames(start) - tc_to_frames(prev_end) <= gap_frames:
-                new_duration = frames_to_tc(tc_to_frames(end) - tc_to_frames(prev_start))
-                merged_clips[-1] = (name, prev_start, end, new_duration)
+        idx = open_by_name.get(name)
+        if idx is not None:
+            _, p_start, p_end, _ = merged_clips[idx]
+            if tc_to_frames(start) - tc_to_frames(p_end) <= gap_frames:
+                new_end = end if tc_to_frames(end) > tc_to_frames(p_end) else p_end
+                new_duration = frames_to_tc(tc_to_frames(new_end) - tc_to_frames(p_start))
+                merged_clips[idx] = (name, p_start, new_end, new_duration)
                 continue
-        merged_clips.append(clip)
+        merged_clips.append((name, start, end, duration))
+        open_by_name[name] = len(merged_clips) - 1
     clips = merged_clips
 
     # Group stems with common prefix that overlap or are within gap
