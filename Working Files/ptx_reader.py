@@ -748,14 +748,16 @@ def read_session(path: Path, force_decode: bool = False) -> dict:
         except Exception as e:  # pragma: no cover - defensive
             print(f"  clips  : extraction failed ({e})", file=sys.stderr)
     track_clips = clip_data.get("tracks", {})
+    canonical = clip_data.get("track_names", [])   # authoritative 0x1014 list
 
-    # tracks: short strings (<=60c) that look like post-prod naming, UNIONed
-    # with every track that actually has clips. A track with audio must be
-    # selectable even if its name doesn't match the family whitelist (the
-    # studio uses prefixes like "Sync FX", "Spot FX", "GFX", "Editor BG"…).
+    # Authoritative-first track list: every audio track the PTX itself lists
+    # (0x1014) plus every track that has clips (0x1052) — names taken straight
+    # from the session, not guessed. The name-pattern whitelist is now ADDITIVE
+    # only: it contributes folder-track labels (e.g. "vNAR All") that aren't in
+    # 0x1014, and is never a filter that can hide a real track.
     short = [s for s in all_strings if len(s) <= 60 and not AUDIO_RE.search(s) and not SESSION_RE.search(s) and not PATH_RE.match(s)]
     whitelisted = {s for s in short if TRACK_RE.match(s) and not looks_like_xor_noise(s)}
-    tracks = sorted(whitelisted | set(track_clips))
+    tracks = sorted(set(canonical) | set(track_clips) | whitelisted)
 
     # session metadata that's now readable
     sample_rate = extract_sample_rate(data)

@@ -160,10 +160,22 @@ def extract_clips(decoded: bytes) -> dict:
     # drop tracks with no clips, keep stable order
     tracks = {k: v for k, v in tracks.items() if v}
 
+    # Canonical AUDIO track list straight from the session (0x1014): the
+    # authoritative track names, in session order, with NO name-pattern
+    # guessing. Includes tracks that have no clips. Folder tracks aren't here.
+    track_names: list[str] = []
+    seen_tn: set[str] = set()
+    for tnb in all_of(0x1014):
+        nm = _rstr(decoded, tnb["offset"] + 2)
+        if nm and nm not in seen_tn:
+            seen_tn.add(nm)
+            track_names.append(nm)
+
     return {
         "wav_files": wav_files,
         "regions": regions,
         "tracks": tracks,
+        "track_names": track_names,
     }
 
 
