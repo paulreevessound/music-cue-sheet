@@ -244,6 +244,46 @@ def write_xlsx(merged_clips, raw_clips, output_path, session_info):
     wb.save(output_path)
 
 
+_LIB_KEY = re.compile(r'^([A-Za-z]{2,}\d+_\d+)')
+
+
+def cue_key(name):
+    """Identity of the underlying cue. Library music is named
+    ALBUM_TRACK_VARIANT TITLE_STEM (e.g. 'XRC139_07_9 ALL IN THE DAYS WORK_STRINGS'),
+    so every variant and stem of one track shares its ALBUM_TRACK code
+    ('XRC139_07'). Anything without that catalogue code keys on its own name —
+    we do NOT fuzzy-match differently-named clips.
+    """
+    m = _LIB_KEY.match(name)
+    return m.group(1) if m else name
+
+
+def _title_of(name, key):
+    """Human title of a library clip: text after the ALBUM_TRACK_VARIANT code,
+    minus the file-extension / version tail."""
+    rest = name[len(key):]
+    rest = re.sub(r'^_\d+', '', rest).lstrip('_ ')                 # drop _VARIANT
+    rest = re.sub(r'\.(wav|mp3|aif|aiff|new)\b.*$', '', rest, flags=re.I)
+    return rest.strip()
+
+
+def cue_display_name(members, key):
+    """Name for a consolidated cue. Library cues use the common title across
+    their members (so stems/variants collapse to the track title); everything
+    else uses its own cleaned name."""
+    if not _LIB_KEY.fullmatch(key):
+        return clean_name(members[0])
+    titles = [_title_of(m, key) for m in members] or ['']
+    common = titles[0]
+    for t in titles[1:]:
+        n = 0
+        while n < len(common) and n < len(t) and common[n] == t[n]:
+            n += 1
+        common = common[:n]
+    common = re.sub(r'[ _]+$', '', common).strip()
+    return common or titles[0] or clean_name(members[0])
+
+
 def main(input_file, merge_gap_frames=None):
     """Run the full pipeline. Returns (xlsx_path, pdf_path).
 
@@ -285,50 +325,30 @@ def main(input_file, merge_gap_frames=None):
     # the same position don't show twice), unmerged and ungrouped.
     raw_clips = list(unique_clips)
 
-    # Consolidate same-name clips that overlap or sit within the gap — even when
-    # OTHER clips are interleaved between them in time. A music cue is usually
-    # chopped into segments (edits/crossfades) with FX or other clips landing in
-    # the gaps; tracking the open cue per NAME (not just the previous row) keeps
-    # the music cue as a single entry instead of splitting it across rows.
-    open_by_name = {}   # name -> index of its currently-open cue in merged_clips
-    merged_clips = []
-    for clip in clips:  # sorted by start
-        name, start, end, duration = clip
-        idx = open_by_name.get(name)
-        if idx is not None:
-            _, p_start, p_end, _ = merged_clips[idx]
-            if tc_to_frames(start) - tc_to_frames(p_end) <= gap_frames:
-                new_end = end if tc_to_frames(end) > tc_to_frames(p_end) else p_end
-                new_duration = frames_to_tc(tc_to_frames(new_end) - tc_to_frames(p_start))
-                merged_clips[idx] = (name, p_start, new_end, new_duration)
-                continue
-        merged_clips.append((name, start, end, duration))
-        open_by_name[name] = len(merged_clips) - 1
-    clips = merged_clips
+    # Consolidate clips into cues. A cue = one library track (ALBUM_TRACK, so
+    # all its variants/stems fold together) or, for anything without a
+    # catalogue code, one exact name — NO fuzzy matching. Same-cue clips that
+    # overlap or sit within the gap merge into one entry even when other clips
+    # are interleaved between them in time (the open cue is tracked per key, so
+    # a music cue chopped into segments stays one row).
+    open_cues = {}
+    cues = []   # each: [key, start, end, [member names]]
+    for name, start, end, duration in clips:  # sorted by start
+        key = cue_key(name)
+        idx = open_cues.get(key)
+        if idx is not None and tc_to_frames(start) - tc_to_frames(cues[idx][2]) <= gap_frames:
+            if tc_to_frames(end) > tc_to_frames(cues[idx][2]):
+                cues[idx][2] = end
+            cues[idx][3].append(name)
+            continue
+        cues.append([key, start, end, [name]])
+        open_cues[key] = len(cues) - 1
 
-    # Group stems with common prefix that overlap or are within gap
-    grouped_clips = []
-    i = 0
-    while i < len(clips):
-        name, start, end, duration = clips[i]
-        group_end = end
-        group_prefix = name
-        j = i + 1
-        while j < len(clips):
-            next_name, next_start, next_end, _ = clips[j]
-            prefix = common_prefix(group_prefix, next_name)
-            min_prefix = PREFIX_THRESHOLD_AT_BOUNDARY if (prefix.endswith('_') or prefix.endswith(' ')) else PREFIX_THRESHOLD
-            if len(prefix) >= min_prefix and overlaps_or_within(start, group_end, next_start, next_end, gap_frames):
-                group_prefix = prefix
-                if tc_to_frames(next_end) > tc_to_frames(group_end):
-                    group_end = next_end
-                j += 1
-            else:
-                break
-        merged_duration = frames_to_tc(tc_to_frames(group_end) - tc_to_frames(start))
-        grouped_clips.append((cleanup_display_name(group_prefix), start, group_end, merged_duration))
-        i = j
-    clips = grouped_clips
+    clips = [
+        (cue_display_name(members, key), start, end,
+         frames_to_tc(tc_to_frames(end) - tc_to_frames(start)))
+        for key, start, end, members in cues
+    ]
 
     # One workbook, two sheets: 'Cue Sheet' (merged/grouped) and 'Raw Clips'
     # (every clip, completely unedited). A real .xlsx opens cleanly in Excel
