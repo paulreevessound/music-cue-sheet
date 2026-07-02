@@ -96,6 +96,11 @@ def write_pt_text_from_session(
             if clip_length == 0:
                 continue
 
+            # Muted clips aren't heard in the delivered mix, so they don't
+            # belong on the cue sheet.
+            if clip.get('muted'):
+                continue
+
             # Time-range filter: skip clips entirely outside the requested range.
             # Keep any clip whose timespan overlaps the range.
             if end_samples is not None and clip_start >= end_samples:

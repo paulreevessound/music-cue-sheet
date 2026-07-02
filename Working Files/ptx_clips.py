@@ -216,6 +216,10 @@ def extract_clips(decoded: bytes) -> dict:
             for sub in r1050["children"]:
                 if sub["content_type"] != 0x104f:
                     continue
+                # byte at offset+2 of the 0x104f placement is the CLIP MUTE
+                # flag (verified against a known-muted track: 1 = muted).
+                muted = (sub["offset"] + 2 < len(decoded)
+                         and decoded[sub["offset"] + 2] == 0x01)
                 j = sub["offset"] + 4
                 rawindex = _u(decoded, j, 4)
                 j += 4 + 1
@@ -228,6 +232,7 @@ def extract_clips(decoded: bytes) -> dict:
                     "start_samples": start,
                     "length_samples": reg["length"] if reg else 0,
                     "offset_samples": reg["offset"] if reg else 0,
+                    "muted": muted,
                 })
 
     # drop tracks with no clips, keep stable order
