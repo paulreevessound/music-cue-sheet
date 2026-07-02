@@ -196,6 +196,8 @@ def _fill_sheet(ws, session_info, clips):
 
     r = 4
     for label in HEADER_LABELS:
+        if label == 'TIMECODE FORMAT:':
+            continue  # frame rate omitted — confusing on delivery
         lab = ws.cell(row=r, column=1, value=XLSX_LABEL_MAP.get(label, label))
         lab.font = Font(bold=True, size=9, color=LABEL_GREY_HEX)
         val = ws.cell(row=r, column=2, value=session_info.get(label, ''))
@@ -261,12 +263,8 @@ def main(input_file, merge_gap_frames=None):
     clips, session_info = read_file(input_file)
     print(f"Parsed {len(clips)} clips")
 
-    # Raw Clips sheet = completely unedited: every parsed clip, original names,
-    # no name clean-up / dedupe / merge / grouping. Sorted by start only.
-    raw_clips = sorted(clips, key=lambda c: c[1])
-
-    # The Cue Sheet path normalises names (strip version suffixes like .01) so
-    # stem grouping works, then sorts and dedupes stereo L/R pairs.
+    # Normalise names (strip version suffixes like .01) so stereo/copy pairs
+    # sitting at the same position collapse to one, then sort by start.
     clips = [(clean_name(name), start, end, dur)
              for (name, start, end, dur) in clips]
     clips.sort(key=lambda c: c[1])
@@ -282,6 +280,10 @@ def main(input_file, merge_gap_frames=None):
         seen.add(key)
         unique_clips.append(clip)
     clips = unique_clips
+
+    # Raw Clips sheet = every DISTINCT clip (deduped, so stereo/copy pairs at
+    # the same position don't show twice), unmerged and ungrouped.
+    raw_clips = list(unique_clips)
 
     # Consolidate same-name clips that overlap or sit within the gap — even when
     # OTHER clips are interleaved between them in time. A music cue is usually
