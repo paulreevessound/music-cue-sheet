@@ -16,22 +16,9 @@ import re
 import sys
 from pathlib import Path
 
-# 25fps, 48kHz → 1920 samples per frame
-FRAMES_PER_SECOND = 25
-SAMPLE_RATE = 48000
-SAMPLES_PER_FRAME = SAMPLE_RATE // FRAMES_PER_SECOND  # 1920
+from cuesheet import set_tc_format, frames_to_tc
 
-
-def samples_to_tc(samples: int) -> str:
-    """Convert samples (48kHz) to HH:MM:SS:FF at 25fps."""
-    total_frames = samples // SAMPLES_PER_FRAME
-    h = total_frames // 90000
-    total_frames %= 90000
-    m = total_frames // 1500
-    total_frames %= 1500
-    s = total_frames // 25
-    f = total_frames % 25
-    return f"{h:02d}:{m:02d}:{s:02d}:{f:02d}"
+SAMPLE_RATE = 48000   # fallback if the session doesn't report a sample rate
 
 
 def write_pt_text_from_session(
@@ -54,7 +41,27 @@ def write_pt_text_from_session(
     """
     track_clips = session.get('track_clips', {})
     session_name = session.get('session_name', 'Unknown')
-    sample_rate = session.get('sample_rate', SAMPLE_RATE)
+    sample_rate = session.get('sample_rate') or SAMPLE_RATE
+
+    # Timecode: pull the real frame rate + session start from the session so the
+    # exported timecodes match Pro Tools (drop-frame aware).
+    num, den = session.get('frame_rate') or (0, 0)
+    if not num or not den:
+        num, den = 25, 1
+    fps_exact = num / den
+    fps_int = round(fps_exact)
+    drop = (den == 1001 and num in (30000, 60000))
+    start_frames = session.get('session_start_frames', 0)
+    set_tc_format(fps_int, drop)
+
+    def pos_tc(samples):   # timeline position -> TC (offset by the session start)
+        return frames_to_tc(start_frames + round(samples / sample_rate * fps_exact))
+
+    def dur_tc(samples):   # a duration -> TC (no session-start offset)
+        return frames_to_tc(round(samples / sample_rate * fps_exact))
+
+    rate_label = f"{fps_exact:.2f}".rstrip('0').rstrip('.')
+    tc_format = f"{rate_label} {'Drop Frame' if drop else 'Frame'}"
 
     # Filter: only tracks that exist in track_clips and have clips
     eligible = [
@@ -67,8 +74,8 @@ def write_pt_text_from_session(
         f"SESSION NAME:\t{session_name}",
         f"SAMPLE RATE:\t{float(sample_rate):.6f}",
         f"BIT DEPTH:\t24-bit",
-        f"SESSION START TIMECODE:\t00:00:00:00",
-        f"TIMECODE FORMAT:\t25 Frame",
+        f"SESSION START TIMECODE:\t{pos_tc(0)}",
+        f"TIMECODE FORMAT:\t{tc_format}",
         f"# OF AUDIO TRACKS:\t{len(eligible)}",
         f"# OF AUDIO CLIPS:\t{sum(len(c) for c in track_clips.values())}",
         f"# OF AUDIO FILES:\t{len(session.get('wav_files', []))}",
@@ -108,9 +115,9 @@ def write_pt_text_from_session(
             if start_samples is not None and clip_end <= start_samples:
                 continue
 
-            start_tc = samples_to_tc(clip_start)
-            end_tc = samples_to_tc(clip_end)
-            duration_tc = samples_to_tc(clip_length)
+            start_tc = pos_tc(clip_start)
+            end_tc = pos_tc(clip_end)
+            duration_tc = dur_tc(clip_length)
 
             line = (
                 f"1       \t"

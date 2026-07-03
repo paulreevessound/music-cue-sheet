@@ -249,12 +249,28 @@ def extract_clips(decoded: bytes) -> dict:
             seen_tn.add(nm)
             track_names.append(nm)
 
+    # --- timecode metadata ---
+    # Frame rate is a num/den rational in the single 0x270a block (30000/1001 =
+    # 29.97, 25000/1000 = 25, etc.); session start is a frame number in the
+    # single 0x204d block (drop-frame-aware).
+    fr_num, fr_den = 0, 0
+    for e in all_of(0x270a):
+        fr_num = _u(decoded, e["offset"] + 43, 4)
+        fr_den = _u(decoded, e["offset"] + 47, 4)
+        break
+    session_start_frames = 0
+    for e in all_of(0x204d):
+        session_start_frames = _u(decoded, e["offset"] + 11, 4)
+        break
+
     return {
         "wav_files": wav_files,
         "regions": regions,
         "tracks": tracks,
         "track_names": track_names,
         "track_list": extract_track_list(decoded),
+        "frame_rate": (fr_num, fr_den),
+        "session_start_frames": session_start_frames,
     }
 
 

@@ -797,6 +797,8 @@ def read_session(path: Path, force_decode: bool = False) -> dict:
             print(f"  clips  : extraction failed ({e})", file=sys.stderr)
     track_clips = clip_data.get("tracks", {})
     canonical = clip_data.get("track_names", [])   # authoritative 0x1014 list
+    frame_rate = clip_data.get("frame_rate", (0, 0))
+    session_start_frames = clip_data.get("session_start_frames", 0)
 
     # Authoritative-first track list: every audio track the PTX itself lists
     # (0x1014) plus every track that has clips (0x1052) — names taken straight
@@ -858,6 +860,8 @@ def read_session(path: Path, force_decode: bool = False) -> dict:
         "size_bytes": raw_size,
         "session_name": session_name,
         "sample_rate": sample_rate,
+        "frame_rate": frame_rate,
+        "session_start_frames": session_start_frames,
         "video_files": video_refs,
         "plugins": plugin_names,
         "track_clips": track_clips,

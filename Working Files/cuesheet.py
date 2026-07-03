@@ -29,28 +29,57 @@ HEADER_LABELS = [
     'TIMECODE FORMAT:',
 ]
 
-MERGE_GAP_FRAMES = 125              # 5 seconds at 25fps
-PREFIX_THRESHOLD = 8                # min common-prefix length for stem grouping
-PREFIX_THRESHOLD_AT_BOUNDARY = 15   # stricter when prefix ends at word boundary
+MERGE_GAP_SECONDS = 5   # default gap for consolidating cues
+
+# Timecode format for the cue sheet, set from the session's TIMECODE FORMAT
+# header when the input is read. Defaults to 25fps non-drop.
+_FPS = 25
+_DROP = False
+
+
+def set_tc_format(fps_int, drop):
+    global _FPS, _DROP
+    _FPS, _DROP = fps_int, drop
+
+
+def parse_tc_format(text):
+    """'29.97 Drop Frame' -> (30, True); '25 Frame' -> (25, False)."""
+    low = text.lower()
+    drop = 'drop' in low and 'non' not in low
+    m = re.search(r'[\d.]+', text)
+    return (round(float(m.group())) if m else 25), drop
 
 
 def clean_name(name):
     return re.sub(r'\.\d{2}(-\d{2})?$', '', name)
 
 
-def tc_to_frames(tc):
-    h, m, s, f = tc.split(':')
-    return int(h) * 90000 + int(m) * 1500 + int(s) * 25 + int(f)
-
-
 def frames_to_tc(frames):
-    h = frames // 90000
-    frames %= 90000
-    m = frames // 1500
-    frames %= 1500
-    s = frames // 25
-    f = frames % 25
-    return f"{h:02d}:{m:02d}:{s:02d}:{f:02d}"
+    """Sequential frame count -> HH:MM:SS:FF (';FF' when drop-frame)."""
+    fps = _FPS
+    if _DROP:
+        dropf = 2 * (fps // 30)
+        fp10 = fps * 600 - dropf * 9
+        fpm = fps * 60 - dropf
+        n = frames % (fps * 3600 * 24)
+        d, m = divmod(n, fp10)
+        n += dropf * 9 * d + (dropf * ((m - dropf) // fpm) if m > dropf else 0)
+        sep = ';'
+    else:
+        n, sep = frames, ':'
+    return (f"{(n // (fps * 3600)) % 24:02d}:{(n // (fps * 60)) % 60:02d}:"
+            f"{(n // fps) % 60:02d}{sep}{n % fps:02d}")
+
+
+def tc_to_frames(tc):
+    """HH:MM:SS:FF (or ';FF') -> sequential frame count."""
+    h, m, s, f = (int(x) for x in re.split(r'[:;]', tc.strip()))
+    fps = _FPS
+    total = (h * 3600 + m * 60 + s) * fps + f
+    if _DROP:
+        mins = h * 60 + m
+        total -= 2 * (fps // 30) * (mins - mins // 10)
+    return total
 
 
 def common_prefix(a, b):
@@ -87,6 +116,8 @@ def read_file(input_file):
             parts = line.split('\t')
             if len(parts) == 2 and parts[0] in HEADER_LABELS:
                 session_info[parts[0]] = parts[1].strip()
+                if parts[0] == 'TIMECODE FORMAT:':
+                    set_tc_format(*parse_tc_format(parts[1]))
                 continue
             if len(parts) < 7:
                 continue
@@ -95,9 +126,9 @@ def read_file(input_file):
             end      = parts[4].strip()
             duration = parts[5].strip()
             state    = parts[6].strip()
-            if not re.match(r'^\d{2}:\d{2}:\d{2}:\d{2}$', start):
+            if not re.match(r'^\d{2}:\d{2}:\d{2}[:;]\d{2}$', start):
                 continue
-            if not re.match(r'^\d{2}:\d{2}:\d{2}:\d{2}$', end):
+            if not re.match(r'^\d{2}:\d{2}:\d{2}[:;]\d{2}$', end):
                 continue
             if state != 'Unmuted':
                 continue
@@ -284,23 +315,26 @@ def cue_display_name(members, key):
     return common or titles[0] or clean_name(members[0])
 
 
-def main(input_file, merge_gap_frames=None):
+def main(input_file, merge_gap_seconds=None):
     """Run the full pipeline. Returns (xlsx_path, pdf_path).
 
     Writes a single .xlsx workbook (sheet 'Cue Sheet' matches the PDF; sheet
     'All Clips' is the raw deduped list) plus the branded PDF.
 
-    merge_gap_frames: gap (in frames @25fps) used both for merging adjacent
-    same-name clips and for stem grouping. Defaults to MERGE_GAP_FRAMES (125
-    = 5s) when not supplied by the caller (e.g. the merge-gap slider).
+    merge_gap_seconds: gap (in seconds) used to consolidate cues. Defaults to
+    MERGE_GAP_SECONDS (5s). Converted to frames using the session's actual
+    frame rate (read from the TIMECODE FORMAT header).
     """
-    gap_frames = MERGE_GAP_FRAMES if merge_gap_frames is None else merge_gap_frames
     input_dir = os.path.dirname(input_file)
     input_name = os.path.basename(input_file)
     base_name = os.path.splitext(input_name)[0]
     xlsx_output = os.path.join(input_dir, f"{base_name}_cuesheet.xlsx")
 
+    # read_file sets the timecode format (_FPS/_DROP) from the header first,
+    # so the gap and all TC math below use the session's real frame rate.
     clips, session_info = read_file(input_file)
+    gap = MERGE_GAP_SECONDS if merge_gap_seconds is None else merge_gap_seconds
+    gap_frames = round(gap * _FPS)
     print(f"Parsed {len(clips)} clips")
 
     # Normalise names (strip version suffixes like .01) so stereo/copy pairs

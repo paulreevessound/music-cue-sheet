@@ -712,8 +712,6 @@ class CueSheetHandler(http.server.BaseHTTPRequestHandler):
         base = ptx.stem
         work_dir = ptx.parent
         intermediate_txt = work_dir / f"{base}.cuesheet-tmp.txt"
-        # 25fps → frames per second
-        merge_gap_frames = gap_seconds * 25
 
         # Parse time-range strings to sample positions
         sr = self.session.get('sample_rate', 48000) if self.session else 48000
@@ -745,7 +743,7 @@ class CueSheetHandler(http.server.BaseHTTPRequestHandler):
             # In-process call: works whether script or bundled.
             xlsx_src = Path(cuesheet.main(
                 str(intermediate_txt),
-                merge_gap_frames=merge_gap_frames,
+                merge_gap_seconds=gap_seconds,
             ))
 
             if not xlsx_src.exists():
